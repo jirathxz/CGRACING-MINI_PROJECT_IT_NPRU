@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://kit.fontawesome.com/5efd6bd50f.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <header>
+        <nav>
+            <div class="nav-title">
+                <img src="https://placehold.co/512x512" alt="logo" class="nav-logo">
+            </div>
+            <div class="nav-search">
+                <input type="text" placeholder="ค้นหาสินค้า..." class="search-box">
+                <button><i class="fa-solid fa-search"></i></button>
+            </div>
+            <div class="nav-button">
+                <button><i class="fa-solid fa-bell"></i></button>
+            </div>
+        </nav>
+    </header>
+    <section>
+        <div class="sidebar" id="sidebar">
+            <ul>
+                <li><a href="#"><i class="fa-solid fa-house"></i>&nbsp;Home</a></li>
+                <li><a href="#" class="active"><i class="fa-solid fa-magnifying-glass"></i>&nbsp;Discover</a></li>
+                <li><a href="#"><i class="fa-solid fa-fire"></i>&nbsp;Popular Product</a></li>
+                <li><a href="#"><i class="fa-solid fa-rss"></i>&nbsp;Feed</a></li>
+                <li><a href="#"><i class="fa-solid fa-phone"></i>&nbsp;Contact</a></li>
+                <li><a href="#"><i class="fa-solid fa-money-bill"></i>&nbsp;Seller</a></li>
+            </ul>
+        </div>
+        <div class="container" id="container">
+            <div class="filterbar">
+                <button class="menu-btn" id="sidebarBtn">
+                    <i class="fa-solid fa-xmark" id="sidebarBtnIcon"></i>
+                </button>
+                <button><i class="fa-solid fa-filter"></i>&nbsp;Filter</button>
+            </div>
+            <div class="product-grid" id="products"></div>
+        </div>
+    </section>
+    <script>
+        let products;
+        let productDetail = [
+            {
+                name: "**ฟรี Oil Additive* มันเครื่องสังเคราะห์100% MMC SCOOTER TECH 5W-40 สำหรับสกู๊ตเตอร์ ขนาด 0.8 ลิตร",
+                img: "https://down-th.img.susercontent.com/file/th-11134207-81ztq-mjwxcvgiakg1e2_tn.webp",
+                price: "289"
+            },
+            {
+                name: "Bluetecboost บลูเทค น้ำยาล้างหัวฉีด ดีเซล | เบนซิน ขนาด 60ml และ 300ml",
+                img: "https://down-th.img.susercontent.com/file/th-11134207-81ztd-mju9uomnhipxba_tn.webp",
+                price: "99"
+            },
+            {
+                name: "**ฟรี Oil Additive** น้ำมันเครื่อง MMC SCOOTER TECH / SPORT TECH สังเคราะห์แท้ ขนาด 0.8 / 1 ลิตร",
+                img: "https://down-th.img.susercontent.com/file/th-11134207-81ztc-mjzoyqtyi6mbe0_tn.webp",
+                price: "95"
+            },
+            {
+                name: "**ฟรี Oil Additive !!** S-OIL SEVEN RIDER #9 MA2 10W-40, 10W-50 ขนาด 1 ลิตร น้ำมันเครื่องสังเคราะห์แท้จาก Aramco",
+                img: "https://down-th.img.susercontent.com/file/th-11134207-81ztk-mjwwu5t8ub5w1b_tn.webp",
+                price: "260"
+            },
+            {
+                name: "น้ำมันเฟืองท้าย Duckhams Wix BCP MMC Motul 75W-90 , 80W-90 ขนาด 120 มล.",
+                img: "https://down-th.img.susercontent.com/file/th-11134207-7rase-m9xjo7dfkspba9_tn.webp",
+                price: "55"
+            },
+            {
+                name: "น้ำมันเครื่อง MMC SCOOTER TECH 5W-40 0.8/1 L และ น้ำมันเฟืองท้าย MMC ผสม Ester 120 ml.",
+                img: "https://down-th.img.susercontent.com/file/th-11134207-7r98q-lwraeabbi5dc8e_tn.webp",
+                price: "385"
+            },
+            {
+                name: "**ฟรี Oil Additive** น้ำมันเครื่องสังเคราะห์ 100% MMC SCOOTER TECH 5W-40 สำหรับสกู๊ตเตอร์ ขนาด 1 ลิตร",
+                img: "https://down-th.img.susercontent.com/file/th-11134207-81zti-mjwx5sxcskqrda_tn.webp",
+                price: "340"
+            },
+            {
+                name: "น้ำมันเฟืองท้ายโมตุล Motul Scooter Gear Oil PLUS 80w90 120ml. สูตรใหม่",
+                img: "https://down-th.img.susercontent.com/file/th-11134207-7r98x-lvc35v80t29mf8_tn.webp",
+                price: "60"
+            },
+            {
+                name: "**ฟรี Oil Additive** น้ำมันเครื่อง MMC SPORT TECH 10W-40, 10W-50 สังเคราะห์ 100% ขนาด 1 ลิตร",
+                img: "https://down-th.img.susercontent.com/file/th-11134207-81zth-mjwxgecjn5s37e_tn.webp",
+                price: "390"
+            },
+            {
+                name: "MMC Maintenance ผลิตภัณฑ์ดูแลรักษารถมอเตอร์ไซค์",
+                img: "https://down-th.img.susercontent.com/file/th-11134207-7r98w-lxcalyyx75ww56_tn.webp",
+                price: "150"
+            },
+            {
+                name: "Bluetecboost บลูเทค สารเคลือบเครื่องยนต์ และ ล้างเครื่องยนต์ Hyperlube & FLUSH ขนาด 300 ml. และ 50 ml.",
+                img: "https://down-th.img.susercontent.com/file/th-11134207-81ztc-mjuwzl1f17nr00_tn.webp",
+                price: "198"
+            },
+            {
+                name: "Bluetecboots บลูเทค น้ำยาฟลัชชิ่ง น้ำยาทำความสะอาดเครื่องยนต์ ขนาด 300 ml. และ 50 ml.",
+                img: "https://down-th.img.susercontent.com/file/th-11134207-81ztj-mjx7ijszd5hjbd_tn.webp",
+                price: "99"
+            },
+            {
+                name: "**ฟรี Oil Additive** น้ำมันเครื่องสังเคราะห์แท้ VOLTRONIC 10W40 TSZ-4T BLUE BASE OIL  ขนาด 1 ลิตร มอเตอร์ไซค์",
+                img: "https://down-th.img.susercontent.com/file/th-11134207-81ztg-mk2p5wqyvwg026_tn.webp",
+                price: "490"
+            },
+            {
+                name: "เซตน้ำมันเครื่อง MMC SCOOTER TECH 5W-40 สำหรับ Forza / ADV พร้อมกรอง",
+                img: "https://down-th.img.susercontent.com/file/th-11134207-81ztj-mjiilkjg36kj0b_tn.webp",
+                price: "849"
+            },
+            {
+                name: "**ฟรี!! Oil Additive** น้ำมันเครื่องสังเคราะห์แท้ 100% LUMAX RS-1 10W-40,10W-50 | AX-1 10W-40 3+4+5 API SP ขนาด 1 ลิตร",
+                img: "https://down-th.img.susercontent.com/file/th-11134207-81ztn-mjwxn2fah7uv13_tn.webp",
+                price: "390"
+            },
+            {
+                name: "ชุดน้ำมันเครื่อง Voltronic 10W-40 สำหรับ Forza / ADV สังเคราะห์แท้ 100% แถมกรวยและน้ำยาล้างรถ",
+                img: "https://down-th.img.susercontent.com/file/th-11134207-7ra0q-md94ak5rqu7200_tn.webp",
+                price: "1,249"
+            },
+            {
+                name: "ชุุด 3 ลิตร น้ำมันเครื่อง MMC SPORT TECH สังเคราะห์แท้ 100% สำหรับ HONDA CB500X CBR650 CBR600RR CBR1000RR",
+                img: "https://down-th.img.susercontent.com/file/th-11134207-81ztd-mk2pddukphc38a_tn.webp",
+                price: "1,290"
+            },
+            {
+                name: "หัวเชื้อเบนซิน บางจาก FURiO S ULTRA สำหรับ มอเตอร์ไซค์ (60 ml.) ล้างหัวฉีด เพิ่มออกเทน ประหยัดน้ำมัน",
+                img: "https://down-th.img.susercontent.com/file/th-11134207-7r98u-lywccojmokvdc1_tn.webp",
+                price: "35"
+            },
+            {
+                name: "แจกฟรี !! ไม่ได้จำหน่าย เสื้อ S-Oil SEVEN คละไซส์ จำนวน 1 ตัว",
+                img: "https://down-th.img.susercontent.com/file/th-11134207-81ztj-mg2j6lwahez35e_tn.webp",
+                price: "169"
+            },
+            {
+                name: "ชุดน้ำมันเครื่อง Voltronic 10W-40 สำหรับ Xmax สังเคราะห์แท้ 100% แถมกรวยและน้ำยาล้างรถ",
+                img: "https://down-th.img.susercontent.com/file/th-11134207-7ra0t-md94apby6dzy27_tn.webp",
+                price: "1,165"
+            },
+            {
+                name: "เซต 3 ลิตร น้ำมันเครื่อง S-OIL SEVEN RIDER #9 MA2 สังเคราะห์แท้ 100% สำหรับ HONDA CB500X CBR650 CBR600RR CBR1000RR",
+                img: "https://down-th.img.susercontent.com/file/th-11134207-81ztm-mj7xanouktfnba_tn.webp",
+                price: "939"
+            },
+            {
+                name: "ชุุด 3 ลิตร น้ำมันเครื่อง MMC SPORT TECH สังเคราะห์แท้ 100% สำหรับ YAMAHA MT03 MT07 MT09 R3 R6 R7 XSR TRACER 900 TENERE",
+                img: "https://down-th.img.susercontent.com/file/th-11134207-81zti-mjjzzbnq7qiq97_tn.webp",
+                price: "1,290"
+            },
+            {
+                name: "น้ำยาหล่อเย็น Duckhams Long Life Coolant สูตรเข้มข้น 5 เท่า ออแกนิค สำหรับมอเตอร์ไซค์และรถยนต์ อัตรา 1:5",
+                img: "https://down-th.img.susercontent.com/file/th-11134207-7rase-m0pyis7zzh6i87_tn.webp",
+                price: "190"
+            },
+            {
+                name: "เซต 3 ลิตร น้ำมันเครื่อง S-OIL SEVEN RIDER #9 MA2 สังเคราะห์แท้ 100% สำหรับ YAMAHA MT03 MT07 MT09 R3 R6 R7 TRACER 90",
+                img: "https://down-th.img.susercontent.com/file/th-11134207-81zto-mj7xbc26kagza7_tn.webp",
+                price: "939"
+            },
+            {
+                name: "เซต MOTUL SCOOTER POWER LE สำหรับ Forza / ADV น้ำมันเครื่องสังเคราะห์แท้ 100% มีของแถม !!",
+                img: "https://down-th.img.susercontent.com/file/th-11134207-81ztm-mfgfwxmoulfv08_tn.webp",
+                price: "789"
+            },
+            {
+                name: "LUMAX RS-1 10W-40 10W-50 และ AX-1 10W-40 น้ำมันเครื่องสังเคราะห์แท้ กรุ๊ป 3+PAO+ESTER ขนาด 1 ลิตรรถมอเตอร์ไซค์",
+                img: "https://down-th.img.susercontent.com/file/th-11134207-81ztg-mhgh34sp1vr924_tn.webp",
+                price: "390"
+            },
+            {
+                name: "ผ้าไมโครไฟเบอร์พรีเมียม 30*30 ซม.จำนวน 1 ผืน (คละสี)",
+                img: "https://down-th.img.susercontent.com/file/th-11134207-7r98r-lvdb8j3mtkp5dc_tn.webp",
+                price: "15"
+            },
+            {
+                name: "น้ำมันเฟืองท้าย Duckhams Racing 75W-90 Polyol-Ester GL-5 สังเคราะห์แท้ 100% ขนาด 120 มล.",
+                img: "https://down-th.img.susercontent.com/file/th-11134207-7rasm-mad020ny4rkg48_tn.webp",
+                price: "95"
+            },
+            {
+                name: "พวงกุญแจ Wix แจกฟรีไม่ได้จำหน่าย",
+                img: "https://down-th.img.susercontent.com/file/th-11134207-81ztm-mf2pnnxenoy302_tn.webp",
+                price: "59"
+            },
+            {
+                name: "น้ำมันเครื่องสังเคราะห์แท้ 100% l Wix Moto XP 10W-40 / 10W-50 ขนาด 1 ลิตร แถมทุกออเดอร์",
+                img: "https://down-th.img.susercontent.com/file/th-11134207-81ztg-mf2pmk2fde6k28_tn.webp",
+                price: "390"
+            }
+        ];
+        const sidebar = document.getElementById("sidebar")
+        const container = document.getElementById("container")
+        const sidebarBtn = document.getElementById("sidebarBtn")
+        const sidebarBtnIcon = document.getElementById("sidebarBtnIcon")
+        let product;
+        window.addEventListener("DOMContentLoaded", () => {
+
+            for (let i = 0; i < productDetail.length; i++) {
+                if (products) {
+                    products = products + `<div class="card product" id="product" onclick="checkout(this)" data-productid="${i}" data-productname="${productDetail[i].name}" data-productimage="${productDetail[i].img}" data-productprice="${productDetail[i].price}">
+                        <img src = "${productDetail[i].img}" alt = "" >
+                            <h3>${productDetail[i].name}<h3>
+                                <label for="price">฿ ${productDetail[i].price}</label>
+                                <p>ขายได้ 999 ชื่น</p>
+                            </div>`;
+                } else {
+
+                    products = `<div class="card product" id="product" onclick="checkout(this)" data-productid="${i}" data-productname="${productDetail[i].name}" data-productimage="${productDetail[i].img}" data-productprice="${productDetail[i].price}">
+                        <img src = "${productDetail[i].img}"alt = "" >
+                            <h3>${productDetail[i].name}<h3>
+                                <label for="price">฿ ${productDetail[i].price}</label>
+                                <p>ขายได้ 999 ชื่น</p>
+                            </div>`;
+                }
+                document.getElementById('products').innerHTML = products;
+            }
+        })
+
+        sidebarBtn.addEventListener("click", () => {
+            if (sidebar.style.marginLeft != "-240px") {
+                sidebar.style.marginLeft = "-240px"
+                container.style.marginLeft = "0px"
+                sidebarBtnIcon.className = "fa-solid fa-bars"
+            } else {
+                sidebar.style.marginLeft = "-0px"
+                container.style.marginLeft = "250px"
+                sidebarBtnIcon.className = "fa-solid fa-xmark"
+            }
+        })
+
+        function checkout(el) {
+            localStorage.setItem("pid", el.dataset.productid)
+            localStorage.setItem("pname", el.dataset.productname)
+            localStorage.setItem("pimg", el.dataset.productimage)
+            localStorage.setItem("pprice", el.dataset.productprice)
+            window.location.href = "checkout.html"
+        }
+    </script>
+</body>
+
+</html>
