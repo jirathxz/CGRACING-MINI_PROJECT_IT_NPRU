@@ -1,110 +1,103 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Motorcycle Oil Shop</title>
+    <title>Home - E-Commerce</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://kit.fontawesome.com/5efd6bd50f.js" crossorigin="anonymous"></script>
 </head>
+
 <body>
-    <header>
-        <nav>
-            <div class="nav-title">
-                <button class="menu-btn" id="sidebarBtn">
-                    <i class="fa-solid fa-xmark" id="sidebarBtnIcon"></i>
-                </button>
-                <img src="https://placehold.co/100x50" alt="logo" class="nav-logo">
-            </div>
-            <div class="nav-search">
-                <input type="text" placeholder="ค้นหาสินค้า..." class="search-box">
-                <button><i class="fa-solid fa-search"></i></button>
-            </div>
-            <div class="nav-button">
-                <button><i class="fa-solid fa-bell"></i></button>
-            </div>
-        </nav>
+    <header class="site-header">
+        <div class="search-box">
+            <input type="text" placeholder="ค้นหาสินค้าที่ต้องการ...">
+            <button class="btn"><i class="fa-solid fa-magnifying-glass"></i></button>
+        </div>
+        <div class="header-actions">
+            <a href="#"><i class="fa-solid fa-bell"></i></a>
+            <a href="#"><i class="fa-solid fa-cart-shopping"></i></a>
+            <a href="#"><i class="fa-solid fa-moon"></i></a>
+            <a href="#" class="user-profile"><img src="http://placehold.co/36x36" alt=""></a>
+        </div>
     </header>
 
-    <section>
-        <div class="sidebar" id="sidebar">
-            <ul>
-                <li><a href="#"><i class="fa-solid fa-house"></i>&nbsp;Home</a></li>
-                <li><a href="#" class="active"><i class="fa-solid fa-magnifying-glass"></i>&nbsp;Discover</a></li>
-                <li><a href="#"><i class="fa-solid fa-fire"></i>&nbsp;Popular Product</a></li>
-                <li><a href="#"><i class="fa-solid fa-rss"></i>&nbsp;Feed</a></li>
-                <li><a href="#"><i class="fa-solid fa-phone"></i>&nbsp;Contact</a></li>
-                <li><a href="#"><i class="fa-solid fa-money-bill"></i>&nbsp;Seller</a></li>
-            </ul>
+    <aside class="site-sidebar">
+        <div class="sidebar-header">
+            <img src="https://media.discordapp.net/attachments/1143202189544783894/1476779531858612305/image-Photoroom_12_2.png?ex=69a25d9d&is=69a10c1d&hm=a4901bb43fbd19c26a6319b4333b309152ba2c7eabdf64ae677e6676463b92b7&=&format=webp&quality=lossless&width=858&height=161"
+                alt="">
         </div>
-        <div class="container" id="container">
-            <div class="filterbar">
-                <button><i class="fa-solid fa-filter"></i>&nbsp;Filter</button>
+        <ul>
+            <li><a href="#" class="nav-active"><i class="fa-solid fa-house"></i>Home</a></li>
+            <li><a href="#"><i class="fa-solid fa-magnifying-glass"></i>Discover</a></li>
+            <li><a href=""><i class="fa-solid fa-phone"></i>Contact</a></li>
+            <li><a href=""><i class="fa-solid fa-grip"></i>Seller Mode</a></li>
+        </ul>
+    </aside>
+
+    <main>
+        <article>
+            <div class="hero-banner">
+                <div class="banner-content">
+                    <h1>Super Sale Day!</h1>
+                    <p>ลดสูงสุด 50% สำหรับน้ำมันเครื่องทุกยี่ห้อ</p>
+                    <button class="btn btn-active">ช้อปเลย</button>
+                </div>
             </div>
-            <div class="product-grid" id="products"></div>
-        </div>
-    </section>
 
-    <script>
-        const productDetail = [
-            { name: "**ฟรี Oil Additive* มันเครื่องสังเคราะห์100% MMC SCOOTER TECH 5W-40 สำหรับสกู๊ตเตอร์ ขนาด 0.8 ลิตร", img: "https://down-th.img.susercontent.com/file/th-11134207-81ztq-mjwxcvgiakg1e2_tn.webp", price: "289" },
-            { name: "Bluetecboost บลูเทค น้ำยาล้างหัวฉีด ดีเซล | เบนซิน ขนาด 60ml และ 300ml", img: "https://down-th.img.susercontent.com/file/th-11134207-81ztd-mju9uomnhipxba_tn.webp", price: "99" },
-            { name: "**ฟรี Oil Additive** น้ำมันเครื่อง MMC SCOOTER TECH / SPORT TECH สังเคราะห์แท้ ขนาด 0.8 / 1 ลิตร", img: "https://down-th.img.susercontent.com/file/th-11134207-81ztc-mjzoyqtyi6mbe0_tn.webp", price: "95" },
-            { name: "**ฟรี Oil Additive !!** S-OIL SEVEN RIDER #9 MA2 10W-40, 10W-50 ขนาด 1 ลิตร น้ำมันเครื่องสังเคราะห์แท้จาก Aramco", img: "https://down-th.img.susercontent.com/file/th-11134207-81ztk-mjwwu5t8ub5w1b_tn.webp", price: "260" },
-            { name: "น้ำมันเฟืองท้าย Duckhams Wix BCP MMC Motul 75W-90 , 80W-90 ขนาด 120 มล.", img: "https://down-th.img.susercontent.com/file/th-11134207-7rase-m9xjo7dfkspba9_tn.webp", price: "55" },
-            { name: "น้ำมันเครื่อง MMC SCOOTER TECH 5W-40 0.8/1 L และ น้ำมันเฟืองท้าย MMC ผสม Ester 120 ml.", img: "https://down-th.img.susercontent.com/file/th-11134207-7r98q-lwraeabbi5dc8e_tn.webp", price: "385" },
-            { name: "**ฟรี Oil Additive** น้ำมันเครื่องสังเคราะห์ 100% MMC SCOOTER TECH 5W-40 สำหรับสกู๊ตเตอร์ ขนาด 1 ลิตร", img: "https://down-th.img.susercontent.com/file/th-11134207-81zti-mjwx5sxcskqrda_tn.webp", price: "340" },
-            { name: "น้ำมันเฟืองท้ายโมตุล Motul Scooter Gear Oil PLUS 80w90 120ml. สูตรใหม่", img: "https://down-th.img.susercontent.com/file/th-11134207-7r98x-lvc35v80t29mf8_tn.webp", price: "60" },
-            { name: "**ฟรี Oil Additive** น้ำมันเครื่อง MMC SPORT TECH 10W-40, 10W-50 สังเคราะห์ 100% ขนาด 1 ลิตร", img: "https://down-th.img.susercontent.com/file/th-11134207-81zth-mjwxgecjn5s37e_tn.webp", price: "390" },
-            { name: "MMC Maintenance ผลิตภัณฑ์ดูแลรักษารถมอเตอร์ไซค์", img: "https://down-th.img.susercontent.com/file/th-11134207-7r98w-lxcalyyx75ww56_tn.webp", price: "150" },
-            { name: "Bluetecboost บลูเทค สารเคลือบเครื่องยนต์ และ ล้างเครื่องยนต์ Hyperlube & FLUSH ขนาด 300 ml. และ 50 ml.", img: "https://down-th.img.susercontent.com/file/th-11134207-81ztc-mjuwzl1f17nr00_tn.webp", price: "198" },
-            { name: "Bluetecboots บลูเทค น้ำยาฟลัชชิ่ง น้ำยาทำความสะอาดเครื่องยนต์ ขนาด 300 ml. และ 50 ml.", img: "https://down-th.img.susercontent.com/file/th-11134207-81ztj-mjx7ijszd5hjbd_tn.webp", price: "99" }
-            // ละรายการอื่นๆ ไว้เพื่อความกระชับ สามารถนำรายการเต็มมาวางต่อได้เลยครับ
-        ];
-
-        const sidebar = document.getElementById("sidebar");
-        const container = document.getElementById("container");
-        const sidebarBtn = document.getElementById("sidebarBtn");
-        const sidebarBtnIcon = document.getElementById("sidebarBtnIcon");
-
-        // เรนเดอร์สินค้า
-        window.addEventListener("DOMContentLoaded", () => {
-            const productsHTML = productDetail.map((product, index) => `
-                <div class="card product" onclick="checkout(this)" 
-                    data-productid="${index}" 
-                    data-productname="${product.name}" 
-                    data-productimage="${product.img}" 
-                    data-productprice="${product.price}">
-                    <img src="${product.img}" alt="${product.name}">
-                    <div class="product-info">
-                        <h3>${product.name}</h3>
-                        <label>฿ ${product.price}</label>
-                        <p>ขายแล้ว 999 ชิ้น</p>
+            <section class="home-section">
+                <div class="section-header">
+                    <h2>หมวดหมู่ยอดนิยม</h2>
+                    <a href="#">ดูทั้งหมด</a>
+                </div>
+                <div class="categories-grid">
+                    <div class="cat-item"><i class="fa-solid fa-oil-can"></i>
+                        <p>น้ำมันเครื่อง</p>
+                    </div>
+                    <div class="cat-item"><i class="fa-solid fa-gears"></i>
+                        <p>น้ำมันเฟืองท้าย</p>
+                    </div>
+                    <div class="cat-item"><i class="fa-solid fa-toolbox"></i>
+                        <p>ชุดเปลี่ยนถ่ายน้ำมันเครื่อง</p>
+                    </div>
+                    <div class="cat-item"><i class="fa-solid fa-heart"></i>
+                        <p>ดูแลรักษารถ</p>
                     </div>
                 </div>
-            `).join(''); // ใช้ join('') เพื่อไม่ให้มีเครื่องหมายลูกน้ำคั่น
+            </section>
 
-            document.getElementById('products').innerHTML = productsHTML;
-        });
+            <section class="home-section">
+                <div class="section-header">
+                    <h2>สินค้าแนะนำสำหรับคุณ</h2>
+                </div>
+                <div class="product-list" id="productList">
+                    <div class="product">
+                        <img src="http://placehold.co/200x200" alt="">
+                        <div class="product-details">
+                            <h3>Castrol EDGE 5W-30</h3>
+                            <small>น้ำมันเครื่องสังเคราะห์แท้</small>
+                            <p><i class="fa-solid fa-baht-sign"></i>&nbsp;1,450</p>
+                            <div class="product-bottom">
+                                <small><i class="fa-solid fa-star"></i>&nbsp;4.9</small>
+                                <small>ขายแล้ว 1.2k</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </article>
+    </main>
 
-        // สลับเปิดปิด Sidebar
-        sidebarBtn.addEventListener("click", () => {
-            if (sidebar.style.marginLeft !== "-240px") {
-                sidebar.style.marginLeft = "-240px";
-                sidebarBtnIcon.className = "fa-solid fa-bars";
-            } else {
-                sidebar.style.marginLeft = "0px";
-                sidebarBtnIcon.className = "fa-solid fa-xmark";
+    <script>
+        const productList = document.getElementById("productList");
+        window.addEventListener("DOMContentLoaded", () => {
+            const productClone = productList.innerHTML;
+            for (let i = 0; i < 7; i++) {
+                productList.innerHTML += productClone;
             }
         });
-
-        function checkout(el) {
-            localStorage.setItem("pid", el.dataset.productid);
-            localStorage.setItem("pname", el.dataset.productname);
-            localStorage.setItem("pimg", el.dataset.productimage);
-            localStorage.setItem("pprice", el.dataset.productprice);
-            window.location.href = "checkout.html";
-        }
     </script>
 </body>
+
 </html>
