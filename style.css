@@ -1,5 +1,18 @@
+/* ==========================================
+   1. IMPORTS & FONTS
+   ========================================== */
 @import url('https://fonts.googleapis.com/css2?family=Prompt:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
+@font-face {
+    font-family: 'Novusa';
+    src: url('fonts/Novusa.otf') format('opentype');
+    font-weight: 400;
+    font-style: normal;
+}
+
+/* ==========================================
+   2. ROOT VARIABLES
+   ========================================== */
 :root {
     --bg-main: #15141b;
     --bg-panel: #201e27;
@@ -7,9 +20,12 @@
     --text-main: #e6e4f1;
     --text-muted: #a2a0b1;
     --text-faint: #6a687d;
-    --accent: #ff3636;
+    --accent: #e24242;
 }
 
+/* ==========================================
+   3. GLOBAL STYLES & RESET
+   ========================================== */
 html {
     box-sizing: border-box;
 }
@@ -38,25 +54,21 @@ a {
     text-decoration: none;
 }
 
+/* ==========================================
+   4. BUTTONS
+   ========================================== */
 button.btn {
     border: none;
     padding: 0.7rem;
     border-radius: 1rem;
     color: var(--text-main);
-    background-color: var(--bg-element);
-}
-
-button.btn {
-    border: none;
-    padding: 0.7rem;
-    border-radius: 1rem;
-    color: var(--text-main);
-    background-color: var(--bg-element);
+    background-color: var(--bg-panel);
+    border: 1px solid var(--bg-element);
     transition: 0.2s;
 }
 
 button.btn:hover {
-    background-color: var(--text-faint);
+    background-color: var(--bg-element);
 }
 
 button.btn.btn-active {
@@ -64,11 +76,13 @@ button.btn.btn-active {
     color: var(--bg-main);
 }
 
+/* ==========================================
+   5. SEARCH BOX
+   ========================================== */
 .search-box {
     display: flex;
     align-items: center;
     gap: 8px;
-    margin: 0 1rem;
 }
 
 .search-box input {
@@ -79,11 +93,10 @@ button.btn.btn-active {
     border: none;
     color: var(--text-main);
     background-color: var(--bg-panel);
-
     flex-shrink: 1;
-
     transition: box-shadow 0.2s ease;
 }
+
 .search-box input:focus {
     box-shadow: 0 0 0 2px var(--accent);
 }
@@ -92,6 +105,9 @@ button.btn.btn-active {
     color: var(--text-faint);
 }
 
+/* ==========================================
+   6. SITE HEADER
+   ========================================== */
 .site-header {
     display: flex;
     position: fixed;
@@ -120,6 +136,13 @@ button.btn.btn-active {
     color: var(--text-main);
 }
 
+.user-profile img {
+    border-radius: 50%;
+}
+
+/* ==========================================
+   7. SIDEBAR & NAVIGATION
+   ========================================== */
 .site-sidebar {
     display: flex;
     flex-direction: column;
@@ -139,6 +162,41 @@ button.btn.btn-active {
 
 .site-sidebar:hover {
     width: 180px;
+}
+
+.site-sidebar .sidebar-header {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem 0.5rem;
+    font-size: 24px;
+    text-align: center;
+    color: var(--accent);
+}
+
+.site-sidebar .sidebar-header .web-name {
+    line-height: 0.8;
+}
+
+.site-sidebar .sidebar-header .web-name p {
+    font-family: 'Novusa', sans-serif;
+}
+
+.site-sidebar .sidebar-header .web-name p.main-text {
+    font-size: 3rem;
+}
+
+.site-sidebar .sidebar-header .web-name p.sub-text {
+    font-size: 1.2rem;
+}
+
+.site-sidebar .sidebar-header img {
+    width: 150px;
+}
+
+.site-sidebar .sidebar-header i {
+    font-size: 32px;
 }
 
 .site-sidebar ul {
@@ -186,10 +244,6 @@ button.btn.btn-active {
     flex-shrink: 0;
 }
 
-.user-profile img {
-    border-radius: 50%;
-}
-
 .nav-active {
     background-color: var(--bg-panel);
     border: 1px solid var(--bg-element);
@@ -200,54 +254,9 @@ button.btn.btn-active {
     color: var(--accent);
 }
 
-
-.site-sidebar ul li a {
-    white-space: nowrap;
-}
-
-@font-face {
-    font-family: 'Novusa';
-    src: url('fonts/Novusa.otf') format('opentype');
-    font-weight: 400;
-    font-style: normal;
-}
-
-.site-sidebar .sidebar-header {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 2rem 0.5rem;
-    font-size: 24px;
-    text-align: center;
-    color: var(--accent);
-}
-
-.site-sidebar .sidebar-header .web-name {
-    line-height: 0.8;
-}
-
-.site-sidebar .sidebar-header .web-name p {
-    font-family: 'Novusa', sans-serif;
-}
-
-.site-sidebar .sidebar-header .web-name p.main-text {
-    font-size: 3rem;
-}
-
-.site-sidebar .sidebar-header .web-name p.sub-text {
-    font-size: 1.2rem;
-}
-
-.site-sidebar .sidebar-header img {
-    width: 150px;
-}
-
-.site-sidebar .sidebar-header i {
-    font-size: 32px;
-}
-
-
+/* ==========================================
+   8. MAIN CONTENT (Article)
+   ========================================== */
 .path {
     color: var(--text-faint);
 }
@@ -256,7 +265,7 @@ article {
     display: flex;
     flex-direction: column;
     gap: 16px;
-    margin-left: calc(80px + 1rem);
+    margin-left: calc(80px + 2rem);
     margin-right: 1rem;
     margin-top: 75px;
     padding: 1rem;
@@ -264,6 +273,9 @@ article {
     border-radius: 1rem;
 }
 
+/* ==========================================
+   9. PRODUCT SECTION
+   ========================================== */
 .product-list {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -276,6 +288,12 @@ article {
     background-color: var(--bg-panel);
     width: 100%;
     border-radius: 1rem;
+    transition: 0.2s;
+}
+
+.product:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 100px rgba(0, 0, 0, 0.6);
 }
 
 .product img {
@@ -289,7 +307,11 @@ article {
 }
 
 .product-details {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     padding: 0.8rem;
+    height: 100%;
 }
 
 .filters {
@@ -302,7 +324,9 @@ article {
     max-width: 200px;
 }
 
-/* Home */
+/* ==========================================
+   10. HOME PAGE & HERO BANNER
+   ========================================== */
 .hero-banner {
     width: 100%;
     height: 250px;
@@ -322,6 +346,8 @@ article {
     overflow: hidden;
     border-radius: 1.5rem;
     margin-bottom: 1rem;
+    user-select: none;
+    -webkit-user-drag: none;
 }
 
 .slider-wrapper {
@@ -345,9 +371,14 @@ article {
     z-index: 1;
 }
 
+/* Specific Banner/Slider states */
 .hero-banner.active {
     opacity: 1;
     z-index: 2;
+}
+
+.hero-banner {
+    transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .banner-content {
@@ -381,21 +412,15 @@ article {
     cursor: pointer;
 }
 
-.slider-container {
-    user-select: none;
-    -webkit-user-drag: none;
-}
-
-.hero-banner {
-    transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
 .dot.active {
     background: white;
     width: 25px;
     border-radius: 5px;
 }
 
+/* ==========================================
+   11. HOME SECTIONS & CATEGORIES
+   ========================================== */
 .home-section {
     display: flex;
     flex-direction: column;
@@ -427,7 +452,6 @@ article {
     text-align: center;
     transition: 0.3s;
     cursor: pointer;
-
     border: 1px solid var(--bg-element);
 }
 
@@ -446,6 +470,9 @@ article {
     padding: 1rem;
 }
 
+/* ==========================================
+   12. MEDIA QUERIES (Responsive)
+   ========================================== */
 @media (max-width: 768px) {
     .site-sidebar {
         display: none;
@@ -465,4 +492,7 @@ article {
         gap: 8px;
     }
 
+    .site-header {
+        margin: 0 1rem;
+    }
 }

@@ -11,35 +11,12 @@
 
 <body>
     <!-- Fixed UI -->
-    <header class="site-header">
-        <div class="search-box">
-            <input type="text" placeholder="Type something...">
-            <button class="btn"><i class="fa-solid fa-magnifying-glass"></i>&nbsp;</button>
-        </div>
-        <div class="header-actions">
-            <a href="#"><i class="fa-solid fa-bell"></i></a>
-            <a href="#"><i class="fa-solid fa-cart-shopping"></i></a>
-            <a href="#"><i class="fa-solid fa-moon"></i></a>
-            <a href="#" class="user-profile"><img src="http://placehold.co/36x36" alt=""></a>
-        </div>
-    </header>
-    <aside class="site-sidebar">
-        <div class="sidebar-header">
-            <img src="https://media.discordapp.net/attachments/1143202189544783894/1476779531858612305/image-Photoroom_12_2.png?ex=69a25d9d&is=69a10c1d&hm=a4901bb43fbd19c26a6319b4333b309152ba2c7eabdf64ae677e6676463b92b7&=&format=webp&quality=lossless&width=858&height=161"
-                alt="">
-        </div>
-        <ul>
-            <li><a href="index.html" class="nav-active"><i class="fa-solid fa-house"></i>หน้าหลัก</a></li>
-                <li><a href="discover.html"><i class="fa-solid fa-magnifying-glass"></i>ค้นหา</a></li>
-                <li><a href="contact.html"><i class="fa-solid fa-phone"></i>ติดต่อ</a></li>
-                <li><a href="seller.html"><i class="fa-solid fa-grip"></i>โหมดผู้ขาย</a></li>
-        </ul>
-    </aside>
+    <div id="nav"></div>
     <!-- Normal UI -->
     <main>
         <article>
             <div class="path">
-                <small>| Discover</small>
+                <small>| ค้นหา</small>
             </div>
             <div class="filters">
                 <button class="btn btn-active">ทั้งหมด</button>
@@ -50,32 +27,64 @@
                 <button class="btn">ชุดเปลี่ยนถ่ายน้ำมันเครื่อง</button>
             </div>
             <div class="product-list" id="productList">
-                <div class="product">
-                    <img src="http://placehold.co/200x200" alt="">
-                    <div class="product-details">
-                        <h3>สินค้าไม่ระบุ</h3>
-                        <small>ไม่มีประเภท</small>
-                        <p><i class="fa-solid fa-baht-sign"></i>&nbsp;199</p>
-                        <div class="product-bottom">
-                            <small><i class="fa-solid fa-star"></i>&nbsp;0.0</small>
-                            <small><i class="fa-solid fa-box-open"></i>&nbsp;ขายแล้ว 0 รายการ</small>
-                        </div>
-                    </div>
-                </div>
+
             </div>
         </article>
+        <script src="products.js"></script>
+        <script>
+            const productList = document.getElementById("productList")
+
+            window.addEventListener("DOMContentLoaded", () => {
+
+                // Test console log products
+                console.log(getProducts());
+
+                products.forEach(product => {
+                    const soldCount = product.sold ? product.sold : "0";
+                    const ratingScore = product.rating || "N/A";
+
+                    const html = `
+        <div class="product">
+            <img src="${product.img_src}" alt="${product.name}">
+            <div class="product-details">
+                <div class="product-top">
+                    <h4>${product.name}</h4>
+                    <small style="color: var(--text-muted);">${product.category}</small>
+                    <p style="color: var(--accent);"><i class="fa-solid fa-baht-sign"></i> ${product.price.toLocaleString()}</p>
+                </div>
+                <div class="product-bottom">
+                    <span><i class="fa-solid fa-star"></i> ${ratingScore}</span>
+                    <span>ขายแล้ว ${soldCount}</span>
+                </div>
+            </div>
+        </div>
     </main>
+    `;
+                    productList.insertAdjacentHTML('beforeend', html);
+                });
+            });
 
-    <script>
-        const productList = document.getElementById("productList")
+            fetch('nav.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('nav').innerHTML = data;
+                    setActiveNav();
+                })
+                .catch(error => console.error('Error loading nav:', error));
 
-        window.addEventListener("DOMContentLoaded", () => {
-            const productClone = productList.innerHTML
-            for (let i = 0; i < 50; i++) {
-                productList.innerHTML += productClone
+            function setActiveNav() {
+                const currentPath = window.location.pathname.split("/").pop() || "index.html";
+                const navLinks = document.querySelectorAll('.site-sidebar ul li a');
+
+                navLinks.forEach(link => {
+                    link.classList.remove('nav-active');
+                    const linkPath = link.getAttribute('href');
+                    if (currentPath === linkPath) {
+                        link.classList.add('nav-active');
+                    }
+                });
             }
-        })
-    </script>
+        </script>
 </body>
 
 </html>
