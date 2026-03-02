@@ -89,7 +89,7 @@
                 const ratingScore = product.rating || "N/A";
 
                 const html = `
-        <div class="product">
+        <div class="product" data-img="${product.img_src}" data-name="${product.name}" data-category="${product.category}" data-price="${product.price}" data-rating="${ratingScore}" data-sold="${soldCount}">
             <img src="${product.img_src}" alt="${product.name}">
             <div class="product-details">
                 <div class="product-top">
@@ -108,6 +108,26 @@
                 productList.insertAdjacentHTML('beforeend', html);
             });
 
+            const listProducts = document.querySelectorAll('.product')
+            listProducts.forEach(e => {
+                e.addEventListener("click", () => {
+                    const selected_product = {
+                        img: e.dataset.img,
+                        name: e.dataset.name,
+                        category: e.dataset.category,
+                        price: e.dataset.price,
+                        rating: e.dataset.rating,
+                        sold: e.dataset.sold
+                    };
+
+                    const selected_product_stringify = JSON.stringify(selected_product)
+                    localStorage.setItem("selected_product", selected_product_stringify)
+                    setTimeout(() => {
+                        window.location.href = "view_product.html"
+                    }, 500)
+                    // console.log(selected_product)
+                })
+            })
         });
 
         const slides = document.querySelectorAll('.hero-banner');
@@ -158,6 +178,7 @@
         container.addEventListener('mousedown', () => clearInterval(autoSlide));
         container.addEventListener('touchstart', () => clearInterval(autoSlide));
 
+
         fetch('nav.html')
             .then(response => response.text())
             .then(data => {
@@ -178,6 +199,9 @@
                 }
             });
         }
+
+
+
     </script>
 </body>
 

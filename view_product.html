@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - E-Commerce</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://kit.fontawesome.com/5efd6bd50f.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <div id="nav"></div>
+
+    <main>
+        <article>
+            <div class="path">
+                <small>| สินค้า</small>
+            </div>
+            <div class="view-product">
+                <div class="view-product-left">
+                    <img id="product_img" src="" alt="" width="120px">
+                </div>
+                <div class="view-product-right">
+                    <div id="product_name"></div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <div id="product_category" class="badge badge-red"></div>
+                        <div id="product_rating" class="badge badge-yellow"></div>
+                    </div>
+                    <div id="product_price"></div>
+                    <div id="product_sold"></div>
+                </div>
+            </div>
+        </article>
+    </main>
+    <script src="products.js"></script>
+    <script>
+        const user = "root"
+        const pass = "123"
+
+        const product_img = document.getElementById("product_img")
+        const product_name = document.getElementById("product_name")
+        const product_category = document.getElementById("product_category")
+        const product_price = document.getElementById("product_price")
+        const product_rating = document.getElementById("product_rating")
+        const product_sold = document.getElementById("product_sold")
+        const selected_product = JSON.parse(localStorage.getItem("selected_product"))
+        window.addEventListener("DOMContentLoaded", () => {
+            product_img.src = selected_product.img
+            product_name.innerHTML = selected_product.name
+            product_category.innerHTML = selected_product.category
+            product_price.innerHTML = `<i class="fa-solid fa-baht-sign"></i> ${selected_product.price}`
+            product_rating.innerHTML = `<i class="fa-solid fa-star"></i> ${selected_product.rating}`
+            product_sold.innerHTML = selected_product.sold
+            console.log(selected_product)
+        })
+        fetch('nav.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('nav').innerHTML = data;
+                setActiveNav();
+            })
+            .catch(error => console.error('Error loading nav:', error));
+
+        function setActiveNav() {
+            const currentPath = window.location.pathname.split("/").pop() || "index.html";
+            const navLinks = document.querySelectorAll('.site-sidebar ul li a');
+
+            navLinks.forEach(link => {
+                link.classList.remove('nav-active');
+                const linkPath = link.getAttribute('href');
+                if (currentPath === linkPath) {
+                    link.classList.add('nav-active');
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>

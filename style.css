@@ -21,6 +21,7 @@
     --text-muted: #a2a0b1;
     --text-faint: #6a687d;
     --accent: #e24242;
+    --accent-mid-opacity: #e2424210; 
 }
 
 /* ==========================================
@@ -471,7 +472,70 @@ article {
 }
 
 /* ==========================================
-   12. MEDIA QUERIES (Responsive)
+   12. VIEW PRODUCT
+   ========================================== */
+
+.view-product {
+    display: flex;
+    gap: 16px;
+}
+
+.view-product .view-product-left img {
+    display: flex;
+    border-radius: 1rem;
+    width: 450px !important;
+}
+
+.badge {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    width: fit-content;
+    padding: 0.2rem 0.4rem;
+    border-radius: 1rem;
+    color: #fff;
+    background-color: #ffffff1f;
+    font-weight: 300;
+}
+
+.badge i {
+    font-size: 12px;
+}
+
+.badge.badge-red {
+    display: flex;
+    width: fit-content;
+    padding: 0.2rem 0.4rem;
+    border-radius: 1rem;
+    color: var(--accent);
+    background-color: var(--accent-mid-opacity);
+}
+
+.badge.badge-yellow {
+    display: flex;
+    width: fit-content;
+    padding: 0.2rem 0.4rem;
+    border-radius: 1rem;
+    color: rgb(255, 197, 72);
+    background-color: rgba(255, 197, 72, 0.151);
+}
+
+.view-product .view-product-right #product_name {
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--accent);
+}
+
+.view-product .view-product-right #product_price {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 56px;
+    font-weight: 700;
+}
+/* ==========================================
+   13. MEDIA QUERIES (Responsive)
    ========================================== */
 @media (max-width: 768px) {
     .site-sidebar {
