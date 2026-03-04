@@ -21,7 +21,7 @@
     --text-muted: #a2a0b1;
     --text-faint: #6a687d;
     --accent: #e24242;
-    --accent-mid-opacity: #e2424210; 
+    --accent-mid-opacity: #e2424210;
 }
 
 /* ==========================================
@@ -476,64 +476,141 @@ article {
    ========================================== */
 
 .view-product {
-    display: flex;
-    gap: 16px;
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    /* แบ่งสัดส่วนซ้ายขวาให้สมดุล */
+    gap: 40px;
+    align-items: start;
 }
 
-.view-product .view-product-left img {
+/* ปรับแต่งรูปภาพให้ดูแพง */
+.view-product-left .main-img-container {
+    background-color: var(--bg-panel);
+    border-radius: 1.5rem;
+    padding: 20px;
+    border: 1px solid var(--bg-element);
     display: flex;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.view-product-left img {
+    width: 100% !important;
+    height: auto;
+    object-fit: contain;
+    transition: transform 0.3s ease;
+}
+
+/* ส่วนข้อมูลสินค้า */
+.product-info-header h1 {
+    font-size: 2.5rem;
+    line-height: 1.2;
+    margin-bottom: 10px;
+}
+
+.product-meta {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.price-section {
+    margin: 25px 0;
+    padding: 15px 20px;
+    background-color: var(--accent-mid-opacity);
     border-radius: 1rem;
-    width: 450px !important;
+    display: inline-block;
+    width: 100%;
 }
 
-.badge {
+.price-tag {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.divider {
+    border: none;
+    border-top: 1px solid var(--bg-element);
+    margin: 25px 0;
+}
+
+.productList-Text {
+    grid-column: 1 / -1;
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 4px;
-    width: fit-content;
-    padding: 0.2rem 0.4rem;
-    border-radius: 1rem;
-    color: #fff;
-    background-color: #ffffff1f;
-    font-weight: 300;
+    min-height: 200px; 
+    color: var(--text-faint);
 }
 
-.badge i {
-    font-size: 12px;
-}
-
-.badge.badge-red {
+/* ส่วนปุ่มกดและการเลือกจำนวน */
+.purchase-actions {
     display: flex;
-    width: fit-content;
-    padding: 0.2rem 0.4rem;
-    border-radius: 1rem;
-    color: var(--accent);
-    background-color: var(--accent-mid-opacity);
-}
-
-.badge.badge-yellow {
-    display: flex;
-    width: fit-content;
-    padding: 0.2rem 0.4rem;
-    border-radius: 1rem;
-    color: rgb(255, 197, 72);
-    background-color: rgba(255, 197, 72, 0.151);
-}
-
-.view-product .view-product-right #product_name {
-    font-size: 32px;
-    font-weight: 800;
-    color: var(--accent);
-}
-
-.view-product .view-product-right #product_price {
-    display: flex;
+    gap: 15px;
     align-items: center;
-    gap: 8px;
-    font-size: 56px;
-    font-weight: 700;
+    flex-wrap: wrap;
 }
+
+.quantity-selector {
+    display: flex;
+    border: 1px solid var(--bg-element);
+    border-radius: 0.8rem;
+    overflow: hidden;
+    background: var(--bg-panel);
+}
+
+.quantity-selector button {
+    background: none;
+    border: none;
+    color: var(--text-main);
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.quantity-selector button:hover {
+    background: var(--bg-element);
+}
+
+.quantity-selector input {
+    width: 50px;
+    text-align: center;
+    border: none;
+    background: transparent;
+    color: var(--text-main);
+    font-weight: bold;
+    outline: none;
+}
+
+.btn-primary {
+    background-color: var(--accent) !important;
+    color: white !important;
+    flex-grow: 1;
+    font-weight: 600;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.btn-outline-accent {
+    background: transparent;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+    .view-product {
+        grid-template-columns: 1fr;
+    }
+
+    .view-product-left img {
+        max-width: 400px;
+    }
+}
+
 /* ==========================================
    13. MEDIA QUERIES (Responsive)
    ========================================== */

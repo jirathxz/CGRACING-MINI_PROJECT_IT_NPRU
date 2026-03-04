@@ -19,12 +19,12 @@
                 <small>| ค้นหา</small>
             </div>
             <div class="filters">
-                <button class="btn btn-active">ทั้งหมด</button>
-                <button class="btn">กรองน้ำมันเครื่อง</button>
-                <button class="btn">น้ำมันเครื่อง</button>
-                <button class="btn">ดูแลรักษารถ</button>
-                <button class="btn">น้ำมันเฟืองท้าย</button>
-                <button class="btn">ชุดเปลี่ยนถ่ายน้ำมันเครื่อง</button>
+                <button class="btn btn-active" data-category="all">ทั้งหมด</button>
+                <button class="btn" data-category="กรองน้ำมันเครื่อง">กรองน้ำมันเครื่อง</button>
+                <button class="btn" data-category="น้ำมันเครื่อง">น้ำมันเครื่อง</button>
+                <button class="btn" data-category="ดูแลรักษารถ">ดูแลรักษารถ</button>
+                <button class="btn" data-category="น้ำมันเฟืองท้าย">น้ำมันเฟืองท้าย</button>
+                <button class="btn" data-category="ชุดเปลี่ยนถ่ายน้ำมันเครื่อง">ชุดเปลี่ยนถ่ายน้ำมันเครื่อง</button>
             </div>
             <div class="product-list" id="productList">
 
@@ -32,57 +32,111 @@
         </article>
         <script src="products.js"></script>
         <script>
-            const productList = document.getElementById("productList")
+            const productList = document.getElementById("productList");
+            const filterButtons = document.querySelectorAll(".filters .btn");
 
-            window.addEventListener("DOMContentLoaded", () => {
+            // สร้างสถานะเริ่มต้น (Global State)
+            let currentCategory = "all";
+            let currentSearch = "";
 
-                // Test console log products
-                console.log(getProducts());
+            /**
+             * ฟังก์ชันหลักในการกรองและแสดงผลสินค้า
+             */
+            function displayProducts() {
+                // 1. ล้างข้อมูลหน้าจอเดิม
+                productList.innerHTML = "";
 
-                products.forEach(product => {
-                    const soldCount = product.sold ? product.sold : "0";
+                // 2. กรองสินค้าตาม Category และ Search Query พร้อมกัน
+                const filteredProducts = products.filter(product => {
+                    const matchesCategory = currentCategory === "all" || product.category === currentCategory;
+                    const matchesSearch = product.name.toLowerCase().includes(currentSearch.toLowerCase());
+                    return matchesCategory && matchesSearch;
+                });
+
+                // 3. ตรวจสอบกรณีไม่พบสินค้า
+                if (filteredProducts.length < 1) {
+                    productList.innerHTML = `<div class="productList-Text"><h2>ไม่พบสินค้า</h2></div>`;
+                    return;
+                }
+
+                // 4. วนลูปสร้าง Card สินค้า
+                filteredProducts.forEach(product => {
+                    const soldCount = product.sold || "0";
                     const ratingScore = product.rating || "N/A";
 
                     const html = `
-        <div class="product">
-            <img src="${product.img_src}" alt="${product.name}">
-            <div class="product-details">
-                <div class="product-top">
-                    <h4>${product.name}</h4>
-                    <small style="color: var(--text-muted);">${product.category}</small>
-                    <p style="color: var(--accent);"><i class="fa-solid fa-baht-sign"></i> ${product.price.toLocaleString()}</p>
+            <div class="product" onclick="viewProduct('${product.name}')" style="cursor: pointer;">
+                <img src="${product.img_src}" alt="${product.name}">
+                <div class="product-details">
+                    <div class="product-top">
+                        <h4>${product.name}</h4>
+                        <small style="color: var(--text-muted);">${product.category}</small>
+                        <p style="color: var(--accent); font-weight: bold;">
+                            <i class="fa-solid fa-baht-sign"></i> ${product.price.toLocaleString()}
+                        </p>
+                    </div>
+                    <div class="product-bottom">
+                        <span class="badge badge-yellow"><i class="fa-solid fa-star"></i> ${ratingScore}</span>
+                        <span style="font-size: 0.8rem; color: var(--text-muted);">ขายแล้ว ${soldCount}</span>
+                    </div>
                 </div>
-                <div class="product-bottom">
-                    <span><i class="fa-solid fa-star"></i> ${ratingScore}</span>
-                    <span>ขายแล้ว ${soldCount}</span>
-                </div>
-            </div>
-        </div>
-    </main>
-    `;
+            </div>`;
                     productList.insertAdjacentHTML('beforeend', html);
                 });
+            }
+
+            /**
+             * จัดการ Event ต่างๆ
+             */
+            window.addEventListener("DOMContentLoaded", () => {
+                // แสดงผลครั้งแรก
+                displayProducts();
+
+                // ตัวจัดการปุ่ม Filter
+                filterButtons.forEach(button => {
+                    button.addEventListener("click", () => {
+                        filterButtons.forEach(btn => btn.classList.remove("btn-active"));
+                        button.classList.add("btn-active");
+                        currentCategory = button.getAttribute("data-category");
+                        displayProducts();
+                    });
+                });
+
+                // โหลด Navbar และจัดการ Search Input (กรณีโหลดจากไฟล์ภายนอก)
+                fetch('nav.html')
+                    .then(response => response.text())
+                    .then(data => {
+                        document.getElementById('nav').innerHTML = data;
+                        setActiveNav();
+
+                        // ผูก Event Search หลังจากโหลด Nav เสร็จ
+                        const searchInput = document.getElementById("searchInput");
+                        if (searchInput) {
+                            searchInput.addEventListener("input", (e) => {
+                                currentSearch = e.target.value;
+                                displayProducts();
+                            });
+                        }
+                    })
+                    .catch(error => console.error('Error loading nav:', error));
             });
 
-            fetch('nav.html')
-                .then(response => response.text())
-                .then(data => {
-                    document.getElementById('nav').innerHTML = data;
-                    setActiveNav();
-                })
-                .catch(error => console.error('Error loading nav:', error));
-
-            function setActiveNav() {
-                const currentPath = window.location.pathname.split("/").pop() || "index.html";
-                const navLinks = document.querySelectorAll('.site-sidebar ul li a');
-
-                navLinks.forEach(link => {
-                    link.classList.remove('nav-active');
-                    const linkPath = link.getAttribute('href');
-                    if (currentPath === linkPath) {
-                        link.classList.add('nav-active');
-                    }
-                });
+            /**
+             * ฟังก์ชันสำหรับดูรายละเอียดสินค้า
+             */
+            function viewProduct(name) {
+                const product = products.find(p => p.name === name);
+                if (product) {
+                    localStorage.setItem("selected_product", JSON.stringify({
+                        name: product.name,
+                        img: product.img_src,
+                        category: product.category,
+                        price: product.price,
+                        rating: product.rating,
+                        sold: product.sold
+                    }));
+                    window.location.href = "view_product.html";
+                }
             }
         </script>
 </body>

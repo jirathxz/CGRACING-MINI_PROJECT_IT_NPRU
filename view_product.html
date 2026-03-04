@@ -15,29 +15,58 @@
     <main>
         <article>
             <div class="path">
-                <small>| สินค้า</small>
+                <small><a href="index.html">หน้าแรก</a> / สินค้า / <span
+                        id="path_product_name">รายละเอียด</span></small>
             </div>
+
             <div class="view-product">
                 <div class="view-product-left">
-                    <img id="product_img" src="" alt="" width="120px">
-                </div>
-                <div class="view-product-right">
-                    <div id="product_name"></div>
-                    <div style="display: flex; justify-content: space-between;">
-                        <div id="product_category" class="badge badge-red"></div>
-                        <div id="product_rating" class="badge badge-yellow"></div>
+                    <div class="main-img-container">
+                        <img id="product_img" src="" alt="Product Image">
                     </div>
-                    <div id="product_price"></div>
-                    <div id="product_sold"></div>
+                </div>
+
+                <div class="view-product-right">
+                    <div class="product-info-header">
+                        <h1 id="product_name"></h1>
+                        <div class="product-meta">
+                            <div id="product_category" class="badge badge-red"></div>
+                            <div id="product_rating" class="badge badge-yellow"></div>
+                            <span id="product_sold_count" class="text-muted small">ขายแล้ว 0 ชิ้น</span>
+                        </div>
+                    </div>
+
+                    <div class="price-section">
+                        <h2 id="product_price"></h2>
+                        <span class="price-tag">รวมภาษีมูลค่าเพิ่มแล้ว</span>
+                    </div>
+
+                    <div class="product-description">
+                        <p>สัมผัสประสบการณ์การใช้งานที่เหนือระดับด้วยสินค้าคุณภาพสูง ดีไซน์ทันสมัย
+                            และตอบโจทย์ทุกการใช้งานของคุณ</p>
+                    </div>
+
+                    <hr class="divider">
+
+                    <div class="purchase-actions">
+                        <div class="quantity-selector">
+                            <button type="button" onclick="changeQty(-1)"><i class="fa-solid fa-minus"></i></button>
+                            <input type="number" id="qty" value="1" min="1">
+                            <button type="button" onclick="changeQty(1)"><i class="fa-solid fa-plus"></i></button>
+                        </div>
+                        <button class="btn btn-primary add-to-cart">
+                            <i class="fa-solid fa-cart-plus"></i> เพิ่มลงรถเข็น
+                        </button>
+                        <button class="btn btn-outline-accent">
+                            <i class="fa-solid fa-heart"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
         </article>
     </main>
     <script src="products.js"></script>
     <script>
-        const user = "root"
-        const pass = "123"
-
         const product_img = document.getElementById("product_img")
         const product_name = document.getElementById("product_name")
         const product_category = document.getElementById("product_category")
@@ -45,15 +74,26 @@
         const product_rating = document.getElementById("product_rating")
         const product_sold = document.getElementById("product_sold")
         const selected_product = JSON.parse(localStorage.getItem("selected_product"))
+        function changeQty(amount) {
+            const qtyInput = document.getElementById('qty');
+            let currentQty = parseInt(qtyInput.value);
+            currentQty += amount;
+            if (currentQty < 1) currentQty = 1;
+            qtyInput.value = currentQty;
+        }
+
         window.addEventListener("DOMContentLoaded", () => {
-            product_img.src = selected_product.img
-            product_name.innerHTML = selected_product.name
-            product_category.innerHTML = selected_product.category
-            product_price.innerHTML = `<i class="fa-solid fa-baht-sign"></i> ${selected_product.price}`
-            product_rating.innerHTML = `<i class="fa-solid fa-star"></i> ${selected_product.rating}`
-            product_sold.innerHTML = selected_product.sold
-            console.log(selected_product)
-        })
+            if (selected_product) {
+                product_img.src = selected_product.img;
+                product_name.innerHTML = selected_product.name;
+                document.getElementById('path_product_name').innerText = selected_product.name;
+                product_category.innerHTML = `<i class="fa-solid fa-tag"></i> ${selected_product.category}`;
+                product_price.innerHTML = `<i class="fa-solid fa-baht-sign"></i> ${selected_product.price.toLocaleString()}`;
+                product_rating.innerHTML = `<i class="fa-solid fa-star"></i> ${selected_product.rating}`;
+
+                document.getElementById('product_sold_count').innerText = `ขายแล้ว ${selected_product.sold || 0} ชิ้น`;
+            }
+        });
         fetch('nav.html')
             .then(response => response.text())
             .then(data => {

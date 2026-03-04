@@ -82,119 +82,141 @@
     </main>
     <script src="products.js"></script>
     <script>
+        /**
+ * 1. Global State & Elements
+ * เก็บสถานะปัจจุบันของการค้นหาและหมวดหมู่ไว้เพื่อให้ทำงานร่วมกันได้
+ */
         const productList = document.getElementById("productList");
-        window.addEventListener("DOMContentLoaded", () => {
-            products.forEach(product => {
-                const soldCount = product.sold ? product.sold : "0";
+        let currentSearch = "";
+        let currentCategory = "all";
+
+        /**
+         * 2. ฟังก์ชันหลักในการแสดงผลสินค้า (Render)
+         * ใช้การ Filter ข้อมูลจาก Array 'products' ที่อยู่ในไฟล์ products.js
+         */
+        function displayProducts() {
+            if (!productList) return;
+
+            // ล้างข้อมูลหน้าจอเดิมก่อนวาดใหม่
+            productList.innerHTML = "";
+
+            // กรองสินค้าตามเงื่อนไข (Search + Category)
+            const filteredProducts = products.filter(product => {
+                const matchesSearch = product.name.toLowerCase().includes(currentSearch.toLowerCase());
+                const matchesCategory = currentCategory === "all" || product.category === currentCategory;
+                return matchesSearch && matchesCategory;
+            });
+
+            // แสดงข้อความเมื่อไม่พบสินค้า
+            if (filteredProducts.length < 1) {
+                productList.innerHTML = `
+            <div class="productList-Text" style="grid-column: 1/-1; text-align: center; padding: 3rem; opacity: 0.5;">
+                <i class="fa-solid fa-magnifying-glass" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                <h2>ไม่พบสินค้าที่คุณต้องการ</h2>
+                <p>ลองเปลี่ยนคำค้นหาหรือเลือกหมวดหมู่ใหม่</p>
+            </div>`;
+                return;
+            }
+
+            // วนลูปสร้าง HTML สำหรับสินค้าแต่ละชิ้น
+            filteredProducts.forEach(product => {
+                const soldCount = product.sold || "0";
                 const ratingScore = product.rating || "N/A";
 
                 const html = `
-        <div class="product" data-img="${product.img_src}" data-name="${product.name}" data-category="${product.category}" data-price="${product.price}" data-rating="${ratingScore}" data-sold="${soldCount}">
-            <img src="${product.img_src}" alt="${product.name}">
-            <div class="product-details">
-                <div class="product-top">
-                    <h4>${product.name}</h4>
-                    <small style="color: var(--text-muted);">${product.category}</small>
-                    <p style="color: var(--accent);"><i class="fa-solid fa-baht-sign"></i> ${product.price.toLocaleString()}</p>
+            <div class="product" onclick="viewProductDetails('${encodeURIComponent(JSON.stringify(product))}')" style="cursor: pointer;">
+                <img src="${product.img_src}" alt="${product.name}">
+                <div class="product-details">
+                    <div class="product-top">
+                        <h4>${product.name}</h4>
+                        <small style="color: var(--text-muted);">${product.category}</small>
+                        <p style="color: var(--accent); font-weight: bold;">
+                            <i class="fa-solid fa-baht-sign"></i> ${product.price.toLocaleString()}
+                        </p>
+                    </div>
+                    <div class="product-bottom">
+                        <span class="badge badge-yellow"><i class="fa-solid fa-star"></i> ${ratingScore}</span>
+                        <span style="font-size: 0.8rem; color: var(--text-faint);">ขายแล้ว ${soldCount}</span>
+                    </div>
                 </div>
-                <div class="product-bottom">
-                    <span><i class="fa-solid fa-star"></i> ${ratingScore}</span>
-                    <span>ขายแล้ว ${soldCount}</span>
-                </div>
-            </div>
-        </div>
-    </main>
-    `;
+            </div>`;
                 productList.insertAdjacentHTML('beforeend', html);
             });
-
-            const listProducts = document.querySelectorAll('.product')
-            listProducts.forEach(e => {
-                e.addEventListener("click", () => {
-                    const selected_product = {
-                        img: e.dataset.img,
-                        name: e.dataset.name,
-                        category: e.dataset.category,
-                        price: e.dataset.price,
-                        rating: e.dataset.rating,
-                        sold: e.dataset.sold
-                    };
-
-                    const selected_product_stringify = JSON.stringify(selected_product)
-                    localStorage.setItem("selected_product", selected_product_stringify)
-                    setTimeout(() => {
-                        window.location.href = "view_product.html"
-                    }, 500)
-                    // console.log(selected_product)
-                })
-            })
-        });
-
-        const slides = document.querySelectorAll('.hero-banner');
-        const dots = document.querySelectorAll('.dot');
-        let currentSlide = 0;
-        let startX = 0;
-
-        function showSlide(index) {
-            slides.forEach(s => s.classList.remove('active'));
-            dots.forEach(d => d.classList.remove('active'));
-
-            currentSlide = index;
-            slides[currentSlide].classList.add('active');
-            dots[currentSlide].classList.add('active');
         }
 
-        dots.forEach((dot, index) => {
-            dot.addEventListener('click', () => {
-                showSlide(index);
+        /**
+         * 3. ฟังก์ชันจัดการเมื่อคลิกสินค้า
+         * บันทึกข้อมูลลง LocalStorage และย้ายไปหน้ารายละเอียด
+         */
+        function viewProductDetails(encodedData) {
+            const product = JSON.parse(decodeURIComponent(encodedData));
+            const selected_product = {
+                img: product.img_src,
+                name: product.name,
+                category: product.category,
+                price: product.price,
+                rating: product.rating,
+                sold: product.sold || "0"
+            };
+
+            localStorage.setItem("selected_product", JSON.stringify(selected_product));
+
+            // ใส่ Delay เล็กน้อยเพื่อให้ความรู้สึก Smooth
+            setTimeout(() => {
+                window.location.href = "view_product.html";
+            }, 200);
+        }
+
+        /**
+         * 4. การจัดการ Event ต่างๆ เมื่อหน้าเว็บโหลดเสร็จ
+         */
+        window.addEventListener("DOMContentLoaded", () => {
+            // แสดงสินค้าทั้งหมดทันทีที่เปิดหน้า
+            displayProducts();
+
+            // --- จัดการปุ่ม Filter หมวดหมู่ ---
+            const filterButtons = document.querySelectorAll(".filters .btn");
+            filterButtons.forEach(button => {
+                button.addEventListener("click", () => {
+                    // เปลี่ยนสถานะปุ่ม Active
+                    filterButtons.forEach(btn => btn.classList.remove("btn-active"));
+                    button.classList.add("btn-active");
+
+                    // อัปเดตหมวดหมู่ปัจจุบันและวาดหน้าจอใหม่
+                    currentCategory = button.getAttribute("data-category") || "all";
+                    displayProducts();
+                });
             });
+
+            // --- โหลด Navbar และตั้งค่า Search ---
+            fetch('nav.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('nav').innerHTML = data;
+                    setActiveNav(); // ฟังก์ชันไฮไลท์เมนู (ถ้ามี)
+
+                    // ผูก Event ให้กับช่อง Search ที่โหลดมาใหม่
+                    const searchInput = document.getElementById("searchInput");
+                    if (searchInput) {
+                        searchInput.addEventListener("input", (e) => {
+                            currentSearch = e.target.value;
+                            displayProducts(); // อัปเดตสินค้าแบบ Real-time ตามคำค้นหา
+                        });
+                    }
+                })
+                .catch(error => console.error('Error loading navigation:', error));
         });
 
-        const container = document.querySelector('.slider-container');
-
-        container.addEventListener('touchstart', (e) => {
-            startX = e.touches[0].clientX;
-        });
-
-        container.addEventListener('touchend', (e) => {
-            const endX = e.changedTouches[0].clientX;
-            const diff = startX - endX;
-
-            if (diff > 50) {
-                let next = (currentSlide + 1) % slides.length;
-                showSlide(next);
-            } else if (diff < -50) {
-                let prev = (currentSlide - 1 + slides.length) % slides.length;
-                showSlide(prev);
-            }
-        });
-
-        let autoSlide = setInterval(() => {
-            let next = (currentSlide + 1) % slides.length;
-            showSlide(next);
-        }, 5000);
-
-        // หยุดเลื่อนอัตโนมัติเมื่อมีการคลิกหรือแตะ
-        container.addEventListener('mousedown', () => clearInterval(autoSlide));
-        container.addEventListener('touchstart', () => clearInterval(autoSlide));
-
-
-        fetch('nav.html')
-            .then(response => response.text())
-            .then(data => {
-                document.getElementById('nav').innerHTML = data;
-                setActiveNav();
-            })
-            .catch(error => console.error('Error loading nav:', error));
-
+        /**
+         * 5. ฟังก์ชันเสริมสำหรับ Side Nav
+         */
         function setActiveNav() {
             const currentPath = window.location.pathname.split("/").pop() || "index.html";
             const navLinks = document.querySelectorAll('.site-sidebar ul li a');
 
             navLinks.forEach(link => {
                 link.classList.remove('nav-active');
-                const linkPath = link.getAttribute('href');
-                if (currentPath === linkPath) {
+                if (link.getAttribute('href') === currentPath) {
                     link.classList.add('nav-active');
                 }
             });
