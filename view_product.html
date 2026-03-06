@@ -7,6 +7,7 @@
     <title>Home - E-Commerce</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://kit.fontawesome.com/5efd6bd50f.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>
@@ -54,7 +55,7 @@
                             <input type="number" id="qty" value="1" min="1">
                             <button type="button" onclick="changeQty(1)"><i class="fa-solid fa-plus"></i></button>
                         </div>
-                        <button class="btn btn-primary add-to-cart">
+                        <button class="btn btn-primary" id="add_cart">
                             <i class="fa-solid fa-cart-plus"></i> เพิ่มลงรถเข็น
                         </button>
                         <button class="btn btn-outline-accent">
@@ -73,7 +74,9 @@
         const product_price = document.getElementById("product_price")
         const product_rating = document.getElementById("product_rating")
         const product_sold = document.getElementById("product_sold")
+        const add_cart = document.getElementById("add_cart");
         const selected_product = JSON.parse(localStorage.getItem("selected_product"))
+
         function changeQty(amount) {
             const qtyInput = document.getElementById('qty');
             let currentQty = parseInt(qtyInput.value);
@@ -81,6 +84,8 @@
             if (currentQty < 1) currentQty = 1;
             qtyInput.value = currentQty;
         }
+
+
 
         window.addEventListener("DOMContentLoaded", () => {
             if (selected_product) {
@@ -94,6 +99,27 @@
                 document.getElementById('product_sold_count').innerText = `ขายแล้ว ${selected_product.sold || 0} ชิ้น`;
             }
         });
+        add_cart.addEventListener("click", (e) => {
+
+            let product_cart = (localStorage.getItem("productCart") != null) ? JSON.parse(localStorage.getItem("productCart")) : []
+            product_cart.push({
+                "img": product_img.src,
+                "name": product_name.innerHTML,
+                "category": product_category.innerHTML,
+                "price": product_price.innerHTML
+            })
+            Swal.fire({
+                title: 'เพิ่มตระกร้า',
+                text: `${product_name.innerHTML} [ถูกเพิ่มแล้ว]`,
+                icon: 'success',
+                showConfirmButton: false,
+                timerProgressBar: true,
+                timer: 1000
+            })
+            console.log(`ตะกร้าอัพเดท: ${product_name.innerHTML}`)
+            console.log(product_cart)
+            localStorage.setItem("productCart", JSON.stringify(product_cart))
+        })
         fetch('nav.html')
             .then(response => response.text())
             .then(data => {

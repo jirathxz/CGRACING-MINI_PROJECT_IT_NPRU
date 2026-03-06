@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - E-Commerce</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://kit.fontawesome.com/5efd6bd50f.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <div id="nav"></div>
+
+    <main>
+        <article>
+            <div class="path">
+                <small><a href="index.html">หน้าแรก</a> / ตะกร้า
+            </div>
+            <div id="cart">
+
+
+
+            </div>
+            <button class="btn btn-primary" style="width: 100%; margin-top: 1rem;">ชำระเงิน</button>
+        </article>
+    </main>
+    <script src="products.js"></script>
+    <script>
+        const cart = document.getElementById("cart")
+        const productCart = JSON.parse(localStorage.getItem("productCart"))
+        window.addEventListener("DOMContentLoaded", () => {
+            console.log(productCart)
+            for (let i = 0; i < productCart.length; i++) {
+                cart.innerHTML += `
+                    <div class="cart-item">
+                    <div class="cart-detail-left">
+                        <img src="${productCart[i].img}" alt="">
+                        <div class="cart-product-text">
+                            <h3>${productCart[i].name}</h3>
+                            <p>${productCart[i].price}</p>
+                        </div>
+                    </div>
+                    <div class="cart-detail-right">
+                        <button class="btn" data-index="${i}" onclick="getOut(this)">นำออก</button>
+                    </div>
+                </div>
+                `
+            }
+        })
+
+        function getOut(data)
+        {
+            productCart.splice(data.dataset.index, 1)
+            console.log(productCart)
+            localStorage.setItem("productCart", JSON.stringify(productCart))
+            window.location.reload()
+        }
+
+        fetch('nav.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('nav').innerHTML = data;
+                setActiveNav();
+            })
+            .catch(error => console.error('Error loading nav:', error));
+        
+        function setActiveNav() {
+            const currentPath = window.location.pathname.split("/").pop() || "index.html";
+            const navLinks = document.querySelectorAll('.site-sidebar ul li a');
+
+            navLinks.forEach(link => {
+                link.classList.remove('nav-active');
+                const linkPath = link.getAttribute('href');
+                if (currentPath === linkPath) {
+                    link.classList.add('nav-active');
+                }
+            });
+        }
+
+
+    </script>
+</body>
+
+</html>

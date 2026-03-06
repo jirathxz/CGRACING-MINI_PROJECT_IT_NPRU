@@ -21,6 +21,7 @@
     --text-muted: #a2a0b1;
     --text-faint: #6a687d;
     --accent: #e24242;
+    --accent-faint: #a13434;
     --accent-mid-opacity: #e2424210;
 }
 
@@ -594,6 +595,17 @@ article {
     gap: 10px;
 }
 
+.btn-primary:hover {
+    background-color: var(--accent-faint) !important;
+    color: white !important;
+    flex-grow: 1;
+    font-weight: 600;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
 .btn-outline-accent {
     background: transparent;
     border: 1px solid var(--accent);
@@ -612,7 +624,39 @@ article {
 }
 
 /* ==========================================
-   13. MEDIA QUERIES (Responsive)
+   13. CART
+   ========================================== */
+
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    background-color: var(--bg-panel);
+    border: 1px solid var(--bg-element);
+    border-radius: 1rem;
+    padding: 1rem;
+    gap: 1rem;
+}
+
+.cart-item img {
+    width: 80px;
+    border-radius: 1rem;
+}
+
+.cart-detail-left {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.cart-product-text {
+    display: flex;
+    flex-direction: column;
+}
+
+/* ==========================================
+   14. MEDIA QUERIES (Responsive)
    ========================================== */
 @media (max-width: 768px) {
     .site-sidebar {

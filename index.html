@@ -193,16 +193,7 @@
                 .then(response => response.text())
                 .then(data => {
                     document.getElementById('nav').innerHTML = data;
-                    setActiveNav(); // ฟังก์ชันไฮไลท์เมนู (ถ้ามี)
-
-                    // ผูก Event ให้กับช่อง Search ที่โหลดมาใหม่
-                    const searchInput = document.getElementById("searchInput");
-                    if (searchInput) {
-                        searchInput.addEventListener("input", (e) => {
-                            currentSearch = e.target.value;
-                            displayProducts(); // อัปเดตสินค้าแบบ Real-time ตามคำค้นหา
-                        });
-                    }
+                    setActiveNav(); 
                 })
                 .catch(error => console.error('Error loading navigation:', error));
         });
