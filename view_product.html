@@ -76,9 +76,9 @@
         const product_sold = document.getElementById("product_sold")
         const add_cart = document.getElementById("add_cart");
         const selected_product = JSON.parse(localStorage.getItem("selected_product"))
+        const qtyInput = document.getElementById('qty');
 
         function changeQty(amount) {
-            const qtyInput = document.getElementById('qty');
             let currentQty = parseInt(qtyInput.value);
             currentQty += amount;
             if (currentQty < 1) currentQty = 1;
@@ -106,7 +106,8 @@
                 "img": product_img.src,
                 "name": product_name.innerHTML,
                 "category": product_category.innerHTML,
-                "price": product_price.innerHTML
+                "price": product_price.innerHTML,
+                "quantity": qtyInput.value
             })
             Swal.fire({
                 title: 'เพิ่มตระกร้า',
@@ -114,7 +115,7 @@
                 icon: 'success',
                 showConfirmButton: false,
                 timerProgressBar: true,
-                timer: 1000
+                timer: 3000
             })
             console.log(`ตะกร้าอัพเดท: ${product_name.innerHTML}`)
             console.log(product_cart)

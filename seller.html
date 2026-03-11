@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seller Mode - E-Commerce</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://kit.fontawesome.com/5efd6bd50f.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        .seller-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .seller-header h2 {
+            font-size: 1.5rem;
+            color: var(--text-main);
+        }
+
+        .seller-table-container {
+            background-color: var(--bg-panel);
+            border: 1px solid var(--bg-element);
+            border-radius: 1rem;
+            overflow-x: auto; 
+            box-shadow: var(--shadow-soft);
+        }
+
+        .seller-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            min-width: 700px; 
+        }
+
+        .seller-table th,
+        .seller-table td {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--bg-element);
+            color: var(--text-main);
+            vertical-align: middle;
+        }
+
+        .seller-table th {
+            background-color: rgba(0, 0, 0, 0.15);
+            color: var(--text-muted);
+            font-weight: 500;
+            font-size: 0.9rem;
+            white-space: nowrap;
+        }
+
+        .seller-table tbody tr:hover {
+            background-color: rgba(255, 255, 255, 0.02);
+        }
+
+        .seller-table img {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            object-fit: cover;
+            background-color: #fff;
+        }
+
+        .product-name-cell {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .product-name-cell p {
+            font-size: 0.95rem;
+            font-weight: 500;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            max-width: 300px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-edit,
+        .btn-delete {
+            padding: 0.5rem 0.8rem;
+            font-size: 0.85rem;
+            border-radius: 0.5rem;
+            border: none;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-edit {
+            background-color: var(--bg-element);
+            color: var(--text-main);
+        }
+
+        .btn-edit:hover {
+            background-color: #4b4859;
+        }
+
+        .btn-delete {
+            background-color: var(--accent-mid-opacity);
+            color: var(--accent);
+        }
+
+        .btn-delete:hover {
+            background-color: var(--accent);
+            color: white;
+        }
+
+        .swal2-popup {
+            font-family: 'Prompt', sans-serif !important;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="nav"></div>
+
+    <main>
+        <article>
+            <div class="path">
+                <small><a href="index.html">หน้าแรก</a> / โหมดผู้ขาย</small>
+            </div>
+            
+            <div class="seller-header">
+                <h2>จัดการสินค้า</h2>
+                <button class="btn btn-primary" onclick="addProduct()">
+                    <i class="fa-solid fa-plus"></i> เพิ่มสินค้าใหม่
+                </button>
+            </div>
+
+            <div class="filters">
+                <button class="btn btn-active" data-category="all">ทั้งหมด</button>
+                <button class="btn" data-category="กรองน้ำมันเครื่อง">กรองน้ำมันเครื่อง</button>
+                <button class="btn" data-category="น้ำมันเครื่อง">น้ำมันเครื่อง</button>
+                <button class="btn" data-category="ดูแลรักษารถ">ดูแลรักษารถ</button>
+                <button class="btn" data-category="น้ำมันเฟืองท้าย">น้ำมันเฟืองท้าย</button>
+                <button class="btn" data-category="ชุดเปลี่ยนถ่ายน้ำมันเครื่อง">ชุดเปลี่ยนถ่ายน้ำมันเครื่อง</button>
+            </div>
+
+            <div class="seller-table-container">
+                <table class="seller-table">
+                    <thead>
+                        <tr>
+                            <th>สินค้า</th>
+                            <th>หมวดหมู่</th>
+                            <th>ราคา (บาท)</th>
+                            <th>ยอดขาย</th>
+                            <th>จัดการ</th>
+                        </tr>
+                    </thead>
+                    <tbody id="sellerProductList">
+                        </tbody>
+                </table>
+            </div>
+        </article>
+    </main>
+
+    <script src="products.js"></script>
+    <script>
+        const sellerProductList = document.getElementById("sellerProductList");
+        const filterButtons = document.querySelectorAll(".filters .btn");
+
+        let currentCategory = "all";
+        let currentSearch = "";
+
+        function displaySellerProducts() {
+            sellerProductList.innerHTML = "";
+
+            const filteredProducts = products.filter(product => {
+                const matchesCategory = currentCategory === "all" || product.category === currentCategory;
+                const matchesSearch = product.name.toLowerCase().includes(currentSearch.toLowerCase());
+                return matchesCategory && matchesSearch;
+            });
+
+            if (filteredProducts.length < 1) {
+                sellerProductList.innerHTML = `
+                    <tr>
+                        <td colspan="5" style="text-align: center; padding: 3rem; color: var(--text-muted);">
+                            <i class="fa-solid fa-box-open" style="font-size: 2rem; margin-bottom: 10px;"></i>
+                            <p>ไม่พบสินค้าในระบบ</p>
+                        </td>
+                    </tr>`;
+                return;
+            }
+
+            filteredProducts.forEach((product, index) => {
+                const soldCount = product.sold || "0";
+                
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td>
+                        <div class="product-name-cell">
+                            <img src="${product.img_src}" alt="product_img">
+                            <p>${product.name}</p>
+                        </div>
+                    </td>
+                    <td><span class="badge badge-yellow" style="background: rgba(255,255,255,0.1); color: var(--text-muted);">${product.category}</span></td>
+                    <td style="color: var(--accent); font-weight: bold;">${product.price.toLocaleString()}</td>
+                    <td>${soldCount}</td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn-edit" onclick="editProduct('${encodeURIComponent(product.name)}')">
+                                <i class="fa-solid fa-pen"></i>
+                            </button>
+                            <button class="btn-delete" onclick="deleteProduct('${encodeURIComponent(product.name)}')">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                `;
+                sellerProductList.appendChild(tr);
+            });
+        }
+
+        window.addEventListener("DOMContentLoaded", () => {
+            displaySellerProducts();
+
+            filterButtons.forEach(button => {
+                button.addEventListener("click", () => {
+                    filterButtons.forEach(btn => btn.classList.remove("btn-active"));
+                    button.classList.add("btn-active");
+                    currentCategory = button.getAttribute("data-category");
+                    displaySellerProducts();
+                });
+            });
+
+            fetch('nav.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('nav').innerHTML = data;
+                    setActiveNav();
+
+                    const searchInput = document.getElementById("searchInput");
+                    if (searchInput) {
+                        searchInput.addEventListener("input", (e) => {
+                            currentSearch = e.target.value;
+                            displaySellerProducts(); 
+                        });
+                    }
+                })
+                .catch(error => console.error(error));
+        });
+
+        function setActiveNav() {
+            let currentPath = window.location.pathname.split("/").pop();
+            if (currentPath === "" || currentPath === undefined) currentPath = "index.html";
+            const navLinks = document.querySelectorAll('.site-sidebar ul li a, .bottom-nav ul li a');
+            navLinks.forEach(link => {
+                link.classList.remove('nav-active');
+                if (link.getAttribute('href') === currentPath) link.classList.add('nav-active');
+            });
+        }
+
+        function addProduct() {
+            Swal.fire({
+                title: 'เพิ่มสินค้าใหม่',
+                text: 'ฟีเจอร์นี้เตรียมไว้สำหรับการเปิดหน้าฟอร์มเพิ่มสินค้า',
+                icon: 'info',
+                confirmButtonText: 'ตกลง',
+                confirmButtonColor: '#e24242'
+            });
+        }
+
+        function editProduct(encodedName) {
+            const name = decodeURIComponent(encodedName);
+            Swal.fire({
+                title: 'แก้ไขสินค้า',
+                text: `คุณต้องการแก้ไขข้อมูลของ: ${name}`,
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#e24242',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'ตกลง',
+                cancelButtonText: 'ยกเลิก'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Logic สำหรับเปิดหน้าแก้ไข
+                }
+            });
+        }
+
+        function deleteProduct(encodedName) {
+            const name = decodeURIComponent(encodedName);
+            Swal.fire({
+                title: 'ยืนยันการลบสินค้า?',
+                text: `คุณต้องการลบ "${name}" ใช่หรือไม่? ไม่สามารถกู้คืนได้`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#e24242',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'ลบสินค้า',
+                cancelButtonText: 'ยกเลิก'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: 'ลบสำเร็จ!',
+                        text: 'สินค้านี้ถูกลบออกจากระบบแล้ว (ตัวอย่าง)',
+                        icon: 'success',
+                        confirmButtonColor: '#198754'
+                    });
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>

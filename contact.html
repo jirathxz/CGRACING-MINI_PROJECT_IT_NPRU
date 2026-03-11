@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact - E-Commerce</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://kit.fontawesome.com/5efd6bd50f.js" crossorigin="anonymous"></script>
+    <style>
+        /* สไตล์หน้า Contact (แบบแสดงช่องทางติดต่ออย่างเดียว) */
+        .contact-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 600px;
+            margin: 2rem auto;
+            background-color: var(--bg-panel);
+            border: 1px solid var(--bg-element);
+            border-radius: 1.5rem;
+            padding: 3rem 2rem;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .contact-info h2 {
+            font-size: 2rem;
+            color: var(--text-main);
+            margin-bottom: 0.5rem;
+        }
+
+        .contact-info p {
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        .contact-details {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+            width: 100%;
+        }
+
+        .contact-details li {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            color: var(--text-main);
+            font-size: 1rem;
+            background-color: var(--bg-main);
+            padding: 1.2rem 1.5rem;
+            border-radius: 1rem;
+            border: 1px solid var(--bg-element);
+            text-align: left;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .contact-details li:hover {
+            transform: translateY(-3px);
+            border-color: var(--accent);
+        }
+
+        .contact-details li i {
+            color: var(--accent);
+            font-size: 1.8rem;
+            min-width: 40px;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 2.5rem;
+        }
+
+        .social-links a {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 50px;
+            height: 50px;
+            background-color: var(--bg-main);
+            border: 1px solid var(--bg-element);
+            border-radius: 50%;
+            color: var(--text-muted);
+            font-size: 1.2rem;
+            transition: all 0.3s;
+        }
+
+        .social-links a:hover {
+            background-color: var(--accent);
+            color: white;
+            border-color: var(--accent);
+            transform: translateY(-3px) scale(1.1);
+            box-shadow: 0 5px 15px var(--accent-mid-opacity);
+        }
+
+        /* Responsive สำหรับมือถือ */
+        @media (max-width: 768px) {
+            .contact-wrapper {
+                margin: 1rem;
+                padding: 2rem 1.5rem;
+            }
+            .contact-details li {
+                flex-direction: column;
+                text-align: center;
+                gap: 10px;
+                padding: 1.5rem 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="nav"></div>
+
+    <main>
+        <article>
+            <div class="path">
+                <small><a href="index.html">หน้าแรก</a> / ติดต่อเรา</small>
+            </div>
+
+            <div class="contact-wrapper">
+                <div class="contact-info">
+                    <h2>ติดต่อ CG RACING</h2>
+                    <p>หากคุณมีข้อสงสัย หรือต้องการคำแนะนำเกี่ยวกับสินค้า<br>สามารถติดต่อทีมงานของเราได้ตามช่องทางด้านล่างนี้เลยครับ!</p>
+                    
+                    <ul class="contact-details">
+                        <li>
+                            <i class="fa-solid fa-location-dot"></i>
+                            <div>
+                                <strong>ที่ตั้งร้านค้า</strong><br>
+                                <span style="color: var(--text-muted); font-size: 0.9rem;">อ.เมือง จ.นครปฐม (Nakron Phatom, Thailand)</span>
+                            </div>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-phone"></i>
+                            <div>
+                                <strong>โทรศัพท์</strong><br>
+                                <span style="color: var(--text-muted); font-size: 0.9rem;">xx-xxx-xxx หรือ xxx-xxx-xxx (สายด่วน)</span>
+                            </div>
+                        </li>
+                        <li>
+                            <i class="fa-solid fa-envelope"></i>
+                            <div>
+                                <strong>อีเมล</strong><br>
+                                <span style="color: var(--text-muted); font-size: 0.9rem;">support@cgracing.com</span>
+                            </div>
+                        </li>
+                        <li>
+                            <i class="fa-brands fa-line"></i>
+                            <div>
+                                <strong>LINE Official</strong><br>
+                                <span style="color: var(--text-muted); font-size: 0.9rem;">@cgracing (มี @ ด้วย)</span>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <div class="social-links">
+                        <a href="#" title="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+                        <a href="#" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#" title="TikTok"><i class="fa-brands fa-tiktok"></i></a>
+                    </div>
+                </div>
+            </div>
+        </article>
+    </main>
+
+    <script>
+        // โหลด Navigation และตั้งค่า Active
+        fetch('nav.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('nav').innerHTML = data;
+                setActiveNav();
+            })
+            .catch(error => console.error('Error loading nav:', error));
+        
+        // ฟังก์ชันตั้งค่าปุ่ม Active (รองรับทั้ง Sidebar และ Bottom Nav)
+        function setActiveNav() {
+            let currentPath = window.location.pathname.split("/").pop();
+            
+            if (currentPath === "" || currentPath === undefined) {
+                currentPath = "index.html";
+            }
+
+            const navLinks = document.querySelectorAll('.site-sidebar ul li a, .bottom-nav ul li a');
+
+            navLinks.forEach(link => {
+                link.classList.remove('nav-active');
+                const linkHref = link.getAttribute('href');
+                if (linkHref === currentPath) {
+                    link.classList.add('nav-active');
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - CG RACING</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://kit.fontawesome.com/5efd6bd50f.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        .auth-container {
+            max-width: 400px;
+            margin: 3rem auto;
+            padding: 2.5rem;
+            background-color: var(--bg-panel);
+            border: 1px solid var(--bg-element);
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .auth-header h2 {
+            font-size: 2.2rem;
+            color: var(--text-main);
+            margin-bottom: 0.5rem;
+        }
+
+        .auth-header p {
+            color: var(--text-faint);
+            font-size: 0.9rem;
+        }
+
+        .auth-footer {
+            margin-top: 2rem;
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .auth-footer a {
+            color: var(--accent);
+            font-weight: 600;
+            margin-left: 5px;
+            text-decoration: none;
+        }
+
+        .auth-footer a:hover {
+            text-decoration: underline;
+        }
+
+        .btn-register {
+            width: 100%;
+            padding: 1rem;
+            font-size: 1.05rem;
+            font-weight: 600;
+            margin-top: 0.5rem;
+        }
+
+        .swal2-popup {
+            font-family: 'Prompt', sans-serif !important;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="nav"></div>
+
+    <main>
+        <article>
+            <div class="path">
+                <small><a href="index.html">หน้าแรก</a> / สมัครสมาชิก</small>
+            </div>
+
+            <div class="auth-container">
+                <div class="auth-header">
+                    <h2>สร้างบัญชีใหม่</h2>
+                    <p>ร่วมเป็นส่วนหนึ่งของครอบครัว CG RACING</p>
+                </div>
+
+                <form id="registerForm">
+                    <div class="form-group">
+                        <label for="username">ชื่อผู้ใช้</label>
+                        <input type="text" id="username" class="form-control" placeholder="เช่น somchai_777" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">อีเมล</label>
+                        <input type="email" id="email" class="form-control" placeholder="example@mail.com" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">รหัสผ่าน</label>
+                        <input type="password" id="password" class="form-control" placeholder="รหัสผ่านอย่างน้อย 6 ตัว"
+                            required minlength="6">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="confirm-password">ยืนยันรหัสผ่านอีกครั้ง</label>
+                        <input type="password" id="confirm-password" class="form-control" placeholder="กรอกรหัสผ่านเดิม"
+                            required minlength="6">
+                    </div>
+
+                    <button type="submit" class="btn btn-active btn-register">
+                        <i class="fa-solid fa-user-plus"></i> สมัครสมาชิก
+                    </button>
+                </form>
+
+                <div class="auth-footer">
+                    มีบัญชีอยู่แล้ว? <a href="login.html">เข้าสู่ระบบที่นี่</a>
+                </div>
+            </div>
+        </article>
+    </main>
+
+    <script>
+        fetch('nav.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('nav').innerHTML = data;
+                setActiveNav();
+            })
+            .catch(error => console.error(error));
+
+        function setActiveNav() {
+            let currentPath = window.location.pathname.split("/").pop();
+            if (currentPath === "" || currentPath === undefined) {
+                currentPath = "index.html";
+            }
+            const navLinks = document.querySelectorAll('.site-sidebar ul li a, .bottom-nav ul li a');
+            navLinks.forEach(link => {
+                link.classList.remove('nav-active');
+                if (link.getAttribute('href') === currentPath) {
+                    link.classList.add('nav-active');
+                }
+            });
+        }
+
+        document.getElementById('registerForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const password = document.getElementById('password').value;
+            const confirm = document.getElementById('confirm-password').value;
+
+            if (password !== confirm) {
+                Swal.fire({
+                    title: 'เกิดข้อผิดพลาด!',
+                    text: 'รหัสผ่านและการยืนยันรหัสผ่านไม่ตรงกัน',
+                    icon: 'error',
+                    confirmButtonColor: '#e24242',
+                    confirmButtonText: 'ลองอีกครั้ง'
+                });
+                return;
+            }
+
+            Swal.fire({
+                title: 'สมัครสมาชิกสำเร็จ!',
+                text: 'บัญชีของคุณถูกสร้างเรียบร้อยแล้ว',
+                icon: 'success',
+                confirmButtonColor: '#198754',
+                confirmButtonText: 'ไปหน้าเข้าสู่ระบบ',
+                timer: 3000,
+                timerProgressBar: true
+            }).then(() => {
+                window.location.href = "login.html";
+            });
+        });
+    </script>
+</body>
+
+</html>

@@ -1,9 +1,17 @@
 <header class="site-header">
-    <div class="search-box">
-        <input type="text" id="searchInput" placeholder="ค้นหาสินค้าที่ต้องการ...">
-        <button class="btn"><i class="fa-solid fa-magnifying-glass"></i></button>
+    <div class="web-name web-name-mobile">
+        <p class="main-text">CG</p>
+        <p class="sub-text">RACING</p>
     </div>
+
+    <form class="search-box" id="searchBox" action="discover.html" method="GET">
+        <input type="text" name="search" id="searchInput" placeholder="ค้นหาสินค้าที่ต้องการ...">
+        <button type="submit" class="btn"><i class="fa-solid fa-magnifying-glass"></i></button>
+    </form>
+
     <div class="header-actions">
+        <a href="discover.html" class="mobile-search-btn"><i class="fa-solid fa-magnifying-glass"></i></a>
+
         <a href="#"><i class="fa-solid fa-bell"></i></a>
         <a href="product_cart.html"><i class="fa-solid fa-cart-shopping"></i></a>
         <a href="#"><i class="fa-solid fa-moon"></i></a>
@@ -18,10 +26,38 @@
             <p class="sub-text">RACING</p>
         </div>
     </div>
-    <ul>
+    <ul id="nav_page">
         <li><a href="index.html"><i class="fa-solid fa-house"></i>หน้าหลัก</a></li>
         <li><a href="discover.html"><i class="fa-solid fa-magnifying-glass"></i>ค้นหา</a></li>
         <li><a href="contact.html"><i class="fa-solid fa-phone"></i>ติดต่อ</a></li>
         <li><a href="seller.html"><i class="fa-solid fa-grip"></i>โหมดผู้ขาย</a></li>
     </ul>
 </aside>
+
+<nav class="bottom-nav">
+    <ul>
+        <li><a href="index.html" class="nav-link"><i class="fa-solid fa-house"></i><span>หน้าหลัก</span></a></li>
+        <li><a href="discover.html" class="nav-link"><i class="fa-solid fa-magnifying-glass"></i><span>ค้นหา</span></a>
+        </li>
+        <li><a href="contact.html" class="nav-link"><i class="fa-solid fa-phone"></i><span>ติดต่อ</span></a></li>
+        <li><a href="seller.html" class="nav-link"><i class="fa-solid fa-grip"></i><span>ผู้ขาย</span></a></li>
+    </ul>
+</nav>
+<script>
+    const nav_page = document.getElementById("nav_page")
+    const isLoggedIn = localStorage.getItem("isLoggedIn")
+    const sidebarHeader = document.getElementById("sidebarHeader")
+
+    window.addEventListener("DOMContentLoaded", () => {
+        const isLoggedIn = localStorage.getItem("isLoggedIn");
+
+        if (isLoggedIn === null || isLoggedIn === "false") {
+            localStorage.setItem("isLoggedIn", "true");
+            console.log("สถานะถูกเปลี่ยนเป็น Logged In แล้ว");
+        }
+
+        if (typeof setActiveNav === "function") {
+            setActiveNav();
+        }
+    })
+</script>

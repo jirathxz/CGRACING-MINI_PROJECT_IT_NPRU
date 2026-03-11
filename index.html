@@ -19,34 +19,44 @@
             </div>
             <div class="slider-container">
                 <div class="slider-wrapper">
-                    <div class="hero-banner active">
+                    <div class="hero-banner active" style="background: linear-gradient(135deg, #15141b 0%, #3a1515 100%);">
                         <div class="banner-content">
                             <h1>ปลดปล่อยพลังเต็มสูบ</h1>
-                            <p>ยกระดับสมรรถนะเครื่องยนต์ด้วยน้ำมันเครื่องสังเคราะห์แท้ 100%</p>
-                            <button class="btn btn-active">ช้อปเลย</button>
+                            <p>ยกระดับสมรรถนะเครื่องยนต์ด้วยน้ำมันเครื่องสังเคราะห์แท้ 100% ตอบสนองทุกอัตราเร่ง</p>
+                            <button class="btn btn-active">ช้อปน้ำมันเครื่องเลย</button>
+                        </div>
+                        <div class="banner-image">
+                            <img src="https://down-th.img.susercontent.com/file/th-11134207-81ztq-mjwxcvgiakg1e2_tn.webp" alt="น้ำมันเครื่องสังเคราะห์แท้">
                         </div>
                     </div>
 
-                    <div class="hero-banner" style="background: linear-gradient(135deg, #2563eb, #1e40af);">
+                    <div class="hero-banner" style="background: linear-gradient(135deg, #15141b 0%, #102660 100%);">
                         <div class="banner-content">
                             <h1>ดูแลรถที่คุณรัก</h1>
-                            <p>ฟื้นฟูระบบหัวฉีดและล้างคราบเขม่าให้เครื่องยนต์สะอาดเหมือนใหม่</p>
-                            <button class="btn btn-active">ดูสินค้าดูแลรถ</button>
+                            <p>ฟื้นฟูระบบหัวฉีดและล้างคราบเขม่าให้เครื่องยนต์สะอาดเหมือนใหม่ เครื่องเดินเรียบขึ้น</p>
+                            <button class="btn btn-active" style="background-color: #2563eb; border-color: #2563eb;">ดูสินค้าดูแลรถ</button>
+                        </div>
+                        <div class="banner-image">
+                            <img src="https://down-th.img.susercontent.com/file/th-11134207-81ztd-mju9uomnhipxba_tn.webp" alt="น้ำยาล้างหัวฉีด">
                         </div>
                     </div>
-                    <div class="hero-banner" style="background: linear-gradient(135deg, #eb25d4, #861eaf);">
+                    
+                    <div class="hero-banner" style="background: linear-gradient(135deg, #15141b 0%, #46115e 100%);">
                         <div class="banner-content">
                             <h1>เซตสุดคุ้ม พร้อมเปลี่ยนถ่าย</h1>
-                            <p>น้ำมันเครื่องและกรองคุณภาพตรงรุ่น ครบจบในชุดเดียว</p>
-                            <button class="btn btn-active">เลือกดูชุดสุดคุ้ม</button>
+                            <p>น้ำมันเครื่องและกรองคุณภาพตรงรุ่น ครบจบในชุดเดียว ประหยัดเวลา ประหยัดเงิน</p>
+                            <button class="btn btn-active" style="background-color: #eb25d4; border-color: #eb25d4;">เลือกดูชุดสุดคุ้ม</button>
+                        </div>
+                        <div class="banner-image">
+                            <img src="https://down-th.img.susercontent.com/file/th-11134207-81zti-mky7zdflgd8n45_tn.webp" alt="เซตเปลี่ยนถ่ายน้ำมันเครื่อง">
                         </div>
                     </div>
                 </div>
 
                 <div class="slider-dots">
-                    <span class="dot active"></span>
-                    <span class="dot"></span>
-                    <span class="dot"></span>
+                    <span class="dot active" data-index="0"></span>
+                    <span class="dot" data-index="1"></span>
+                    <span class="dot" data-index="2"></span>
                 </div>
             </div>
 
@@ -83,31 +93,31 @@
     <script src="products.js"></script>
     <script>
         /**
- * 1. Global State & Elements
- * เก็บสถานะปัจจุบันของการค้นหาและหมวดหมู่ไว้เพื่อให้ทำงานร่วมกันได้
- */
+         * 1. Global State & Elements
+         */
         const productList = document.getElementById("productList");
         let currentSearch = "";
         let currentCategory = "all";
 
+        // --- Slider Variables ---
+        let currentSlide = 0;
+        const slides = document.querySelectorAll(".hero-banner");
+        const dots = document.querySelectorAll(".dot");
+        let sliderInterval;
+
         /**
          * 2. ฟังก์ชันหลักในการแสดงผลสินค้า (Render)
-         * ใช้การ Filter ข้อมูลจาก Array 'products' ที่อยู่ในไฟล์ products.js
          */
         function displayProducts() {
             if (!productList) return;
-
-            // ล้างข้อมูลหน้าจอเดิมก่อนวาดใหม่
             productList.innerHTML = "";
 
-            // กรองสินค้าตามเงื่อนไข (Search + Category)
             const filteredProducts = products.filter(product => {
                 const matchesSearch = product.name.toLowerCase().includes(currentSearch.toLowerCase());
                 const matchesCategory = currentCategory === "all" || product.category === currentCategory;
                 return matchesSearch && matchesCategory;
             });
 
-            // แสดงข้อความเมื่อไม่พบสินค้า
             if (filteredProducts.length < 1) {
                 productList.innerHTML = `
             <div class="productList-Text" style="grid-column: 1/-1; text-align: center; padding: 3rem; opacity: 0.5;">
@@ -118,7 +128,6 @@
                 return;
             }
 
-            // วนลูปสร้าง HTML สำหรับสินค้าแต่ละชิ้น
             filteredProducts.forEach(product => {
                 const soldCount = product.sold || "0";
                 const ratingScore = product.rating || "N/A";
@@ -146,7 +155,6 @@
 
         /**
          * 3. ฟังก์ชันจัดการเมื่อคลิกสินค้า
-         * บันทึกข้อมูลลง LocalStorage และย้ายไปหน้ารายละเอียด
          */
         function viewProductDetails(encodedData) {
             const product = JSON.parse(decodeURIComponent(encodedData));
@@ -160,35 +168,69 @@
             };
 
             localStorage.setItem("selected_product", JSON.stringify(selected_product));
-
-            // ใส่ Delay เล็กน้อยเพื่อให้ความรู้สึก Smooth
             setTimeout(() => {
                 window.location.href = "view_product.html";
             }, 200);
         }
 
         /**
-         * 4. การจัดการ Event ต่างๆ เมื่อหน้าเว็บโหลดเสร็จ
+         * 4. ฟังก์ชันจัดการ Slider
+         */
+        function showSlide(index) {
+            // ลบคลาส active ออกจากสไลด์และจุดทั้งหมด
+            slides.forEach(slide => slide.classList.remove("active"));
+            dots.forEach(dot => dot.classList.remove("active"));
+
+            // เพิ่มคลาส active ให้สไลด์และจุดที่เลือก
+            slides[index].classList.add("active");
+            dots[index].classList.add("active");
+        }
+
+        function nextSlide() {
+            currentSlide++;
+            if (currentSlide >= slides.length) {
+                currentSlide = 0; // วนกลับไปหน้าแรก
+            }
+            showSlide(currentSlide);
+        }
+
+        function startSlider() {
+            // เลื่อนอัตโนมัติทุกๆ 5 วินาที (5000 มิลลิวินาที)
+            sliderInterval = setInterval(nextSlide, 5000);
+        }
+
+        function resetSlider() {
+            // รีเซ็ตเวลาเลื่อนอัตโนมัติเมื่อผู้ใช้กดเปลี่ยนเอง
+            clearInterval(sliderInterval);
+            startSlider();
+        }
+
+        /**
+         * 5. การจัดการ Event ต่างๆ เมื่อหน้าเว็บโหลดเสร็จ
          */
         window.addEventListener("DOMContentLoaded", () => {
-            // แสดงสินค้าทั้งหมดทันทีที่เปิดหน้า
             displayProducts();
+            startSlider(); // เริ่มการทำงานของ Slider
 
-            // --- จัดการปุ่ม Filter หมวดหมู่ ---
+            // --- จัดการปุ่มคลิกที่ Dot ---
+            dots.forEach((dot, index) => {
+                dot.addEventListener("click", () => {
+                    currentSlide = index;
+                    showSlide(currentSlide);
+                    resetSlider(); // รีเซ็ตเวลาเพื่อไม่ให้มันเลื่อนหนีทันทีที่กด
+                });
+            });
+
             const filterButtons = document.querySelectorAll(".filters .btn");
             filterButtons.forEach(button => {
                 button.addEventListener("click", () => {
-                    // เปลี่ยนสถานะปุ่ม Active
                     filterButtons.forEach(btn => btn.classList.remove("btn-active"));
                     button.classList.add("btn-active");
-
-                    // อัปเดตหมวดหมู่ปัจจุบันและวาดหน้าจอใหม่
                     currentCategory = button.getAttribute("data-category") || "all";
                     displayProducts();
                 });
             });
 
-            // --- โหลด Navbar และตั้งค่า Search ---
             fetch('nav.html')
                 .then(response => response.text())
                 .then(data => {
@@ -199,22 +241,22 @@
         });
 
         /**
-         * 5. ฟังก์ชันเสริมสำหรับ Side Nav
+         * 6. ฟังก์ชันตั้งค่าปุ่ม Active
          */
         function setActiveNav() {
-            const currentPath = window.location.pathname.split("/").pop() || "index.html";
-            const navLinks = document.querySelectorAll('.site-sidebar ul li a');
-
+            let currentPath = window.location.pathname.split("/").pop();
+            if (currentPath === "" || currentPath === undefined) {
+                currentPath = "index.html";
+            }
+            const navLinks = document.querySelectorAll('.site-sidebar ul li a, .bottom-nav ul li a');
             navLinks.forEach(link => {
                 link.classList.remove('nav-active');
-                if (link.getAttribute('href') === currentPath) {
+                const linkHref = link.getAttribute('href');
+                if (linkHref === currentPath) {
                     link.classList.add('nav-active');
                 }
             });
         }
-
-
-
     </script>
 </body>
 

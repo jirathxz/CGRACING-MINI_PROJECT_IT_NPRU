@@ -4,9 +4,114 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home - E-Commerce</title>
+    <title>Cart - E-Commerce</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://kit.fontawesome.com/5efd6bd50f.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        .cart-layout {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+            align-items: start;
+            margin-top: 1rem;
+        }
+
+        .cart-summary {
+            background-color: var(--bg-panel);
+            border: 1px solid var(--bg-element);
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            position: sticky;
+            top: 100px;
+        }
+
+        .cart-summary h3 {
+            margin-bottom: 1rem;
+            color: var(--text-main);
+            border-bottom: 1px solid var(--bg-element);
+            padding-bottom: 10px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .summary-total {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--accent);
+            border-top: 1px dashed var(--bg-element);
+            padding-top: 15px;
+            margin-top: 10px;
+            margin-bottom: 1.5rem;
+        }
+
+        .cart-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .quantity-selector.small {
+            height: 35px;
+            border-radius: 0.8rem;
+        }
+
+        .quantity-selector.small button {
+            width: 30px;
+            font-size: 1rem;
+        }
+
+        .quantity-selector.small input {
+            width: 40px;
+            font-size: 1rem;
+        }
+
+        .btn-delete {
+            background-color: var(--accent-mid-opacity);
+            color: var(--accent);
+            padding: 0.5rem 0.8rem;
+            border-radius: 0.8rem;
+        }
+
+        .btn-delete:hover {
+            background-color: var(--accent);
+            color: white;
+        }
+
+        .swal2-popup {
+            font-family: 'Prompt', sans-serif !important;
+        }
+
+        @media (max-width: 992px) {
+            .cart-layout {
+                grid-template-columns: 1fr;
+            }
+            .cart-summary {
+                position: relative;
+                top: 0;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .cart-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .cart-actions {
+                width: 100%;
+                justify-content: space-between;
+                margin-top: 10px;
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -15,47 +120,187 @@
     <main>
         <article>
             <div class="path">
-                <small><a href="index.html">หน้าแรก</a> / ตะกร้า
+                <small><a href="index.html">หน้าแรก</a> / ตะกร้าสินค้า</small>
             </div>
-            <div id="cart">
+            
+            <div class="cart-layout">
+                <div id="cartList">
+                </div>
 
-
-
+                <div class="cart-summary">
+                    <h3>สรุปคำสั่งซื้อ</h3>
+                    <div class="summary-row">
+                        <span>ยอดรวมสินค้า</span>
+                        <span id="subTotal">0 บาท</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>ส่วนลด</span>
+                        <span>0 บาท</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>ค่าจัดส่ง</span>
+                        <span style="color: #198754;">ฟรี</span>
+                    </div>
+                    <div class="summary-total">
+                        <span>ยอดสุทธิ</span>
+                        <span id="grandTotal">0 บาท</span>
+                    </div>
+                    <button class="btn btn-danger" id="checkoutBtn" style="width: 100%; padding: 1rem; font-size: 1.1rem;">
+                        ดำเนินการชำระเงิน
+                    </button>
+                </div>
             </div>
-            <button class="btn btn-primary" style="width: 100%; margin-top: 1rem;">ชำระเงิน</button>
         </article>
     </main>
+
     <script src="products.js"></script>
     <script>
-        const cart = document.getElementById("cart")
-        const productCart = JSON.parse(localStorage.getItem("productCart"))
-        window.addEventListener("DOMContentLoaded", () => {
-            console.log(productCart)
-            for (let i = 0; i < productCart.length; i++) {
-                cart.innerHTML += `
+        const cartList = document.getElementById("cartList");
+        const subTotalEl = document.getElementById("subTotal");
+        const grandTotalEl = document.getElementById("grandTotal");
+        const checkoutBtn = document.getElementById("checkoutBtn");
+        
+        let productCart = JSON.parse(localStorage.getItem("productCart")) || [];
+
+        function getPriceNumber(priceString) {
+            const textOnly = priceString.replace(/<[^>]*>?/gm, ''); 
+            const numberOnly = textOnly.replace(/[^0-9]/g, ''); 
+            return parseInt(numberOnly) || 0;
+        }
+
+        function renderCart() {
+            cartList.innerHTML = "";
+            let totalPrice = 0;
+
+            if (productCart.length === 0) {
+                cartList.innerHTML = `
+                    <div style="text-align: center; padding: 4rem 2rem; background: var(--bg-panel); border-radius: 1.5rem; border: 1px solid var(--bg-element);">
+                        <i class="fa-solid fa-cart-shopping" style="font-size: 4rem; color: var(--text-faint); margin-bottom: 1.5rem;"></i>
+                        <h2 style="margin-bottom: 0.5rem;">ตะกร้าของคุณว่างเปล่า</h2>
+                        <p style="color: var(--text-muted); margin-bottom: 1.5rem;">ลองค้นหาสินค้าที่คุณสนใจแล้วเพิ่มลงตะกร้าดูสิ</p>
+                        <a href="index.html" class="btn">ไปช้อปปิ้งเลย</a>
+                    </div>
+                `;
+                updateSummary(0);
+                checkoutBtn.disabled = true;
+                checkoutBtn.style.opacity = '0.5';
+                checkoutBtn.style.cursor = 'not-allowed';
+                return;
+            }
+
+            checkoutBtn.disabled = false;
+            checkoutBtn.style.opacity = '1';
+            checkoutBtn.style.cursor = 'pointer';
+
+            productCart.forEach((item, index) => {
+                const itemPrice = getPriceNumber(item.price);
+                const itemQty = parseInt(item.quantity) || 1;
+                const itemTotal = itemPrice * itemQty;
+                
+                totalPrice += itemTotal;
+
+                cartList.innerHTML += `
                     <div class="cart-item">
-                    <div class="cart-detail-left">
-                        <img src="${productCart[i].img}" alt="">
-                        <div class="cart-product-text">
-                            <h3>${productCart[i].name}</h3>
-                            <p>${productCart[i].price}</p>
+                        <div class="cart-detail-left">
+                            <img src="${item.img}" alt="product image">
+                            <div class="cart-product-text">
+                                <h3>${item.name}</h3>
+                                <small style="color: var(--text-muted);">${item.category || ''}</small>
+                                <p style="color: var(--accent); font-weight: bold; margin-top: 5px;">
+                                    <i class="fa-solid fa-baht-sign"></i> ${itemPrice.toLocaleString()}
+                                </p>
+                            </div>
+                        </div>
+                        <div class="cart-actions">
+                            <div class="quantity-selector small">
+                                <button type="button" onclick="updateQty(${index}, -1)"><i class="fa-solid fa-minus"></i></button>
+                                <input type="number" value="${itemQty}" readonly>
+                                <button type="button" onclick="updateQty(${index}, 1)"><i class="fa-solid fa-plus"></i></button>
+                            </div>
+                            <button class="btn btn-delete" onclick="removeItem(${index})" title="ลบสินค้า">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
                         </div>
                     </div>
-                    <div class="cart-detail-right">
-                        <button class="btn" data-index="${i}" onclick="getOut(this)">นำออก</button>
-                    </div>
-                </div>
-                `
-            }
-        })
+                `;
+            });
 
-        function getOut(data)
-        {
-            productCart.splice(data.dataset.index, 1)
-            console.log(productCart)
-            localStorage.setItem("productCart", JSON.stringify(productCart))
-            window.location.reload()
+            updateSummary(totalPrice);
         }
+
+        function updateSummary(total) {
+            const formattedTotal = `${total.toLocaleString()} บาท`;
+            subTotalEl.innerText = formattedTotal;
+            grandTotalEl.innerText = formattedTotal;
+        }
+
+        function updateQty(index, change) {
+            let currentQty = parseInt(productCart[index].quantity) || 1;
+            currentQty += change;
+            
+            if (currentQty < 1) currentQty = 1;
+            
+            productCart[index].quantity = currentQty;
+            localStorage.setItem("productCart", JSON.stringify(productCart));
+            renderCart();
+        }
+
+        function removeItem(index) {
+            Swal.fire({
+                title: 'นำสินค้าออก?',
+                text: "ต้องการนำสินค้านี้ออกจากตะกร้าใช่หรือไม่",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#e24242',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'ลบออก',
+                cancelButtonText: 'ยกเลิก'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    productCart.splice(index, 1);
+                    localStorage.setItem("productCart", JSON.stringify(productCart));
+                    renderCart();
+                    
+                    Swal.fire({
+                        title: 'ลบสำเร็จ!',
+                        text: 'นำสินค้าออกจากตะกร้าเรียบร้อยแล้ว',
+                        icon: 'success',
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                }
+            });
+        }
+
+        checkoutBtn.addEventListener("click", () => {
+            Swal.fire({
+                title: 'ยืนยันการสั่งซื้อ',
+                text: `ยอดชำระสุทธิ ${grandTotalEl.innerText} ต้องการดำเนินการต่อหรือไม่?`,
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#198754',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'ชำระเงิน',
+                cancelButtonText: 'ยกเลิก'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: 'สั่งซื้อสำเร็จ!',
+                        text: 'ขอบคุณที่อุดหนุนสินค้าของเรา',
+                        icon: 'success',
+                        confirmButtonColor: '#198754'
+                    }).then(() => {
+                        productCart = [];
+                        localStorage.setItem("productCart", JSON.stringify(productCart));
+                        renderCart();
+                    });
+                }
+            });
+        });
+
+        window.addEventListener("DOMContentLoaded", () => {
+            renderCart();
+        });
 
         fetch('nav.html')
             .then(response => response.text())
@@ -63,22 +308,20 @@
                 document.getElementById('nav').innerHTML = data;
                 setActiveNav();
             })
-            .catch(error => console.error('Error loading nav:', error));
+            .catch(error => console.error(error));
         
         function setActiveNav() {
-            const currentPath = window.location.pathname.split("/").pop() || "index.html";
-            const navLinks = document.querySelectorAll('.site-sidebar ul li a');
-
+            let currentPath = window.location.pathname.split("/").pop();
+            if (currentPath === "" || currentPath === undefined) currentPath = "index.html";
+            
+            const navLinks = document.querySelectorAll('.site-sidebar ul li a, .bottom-nav ul li a');
             navLinks.forEach(link => {
                 link.classList.remove('nav-active');
-                const linkPath = link.getAttribute('href');
-                if (currentPath === linkPath) {
+                if (link.getAttribute('href') === currentPath) {
                     link.classList.add('nav-active');
                 }
             });
         }
-
-
     </script>
 </body>
 

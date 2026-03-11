@@ -4,141 +4,250 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Discover - E-Commerce</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://kit.fontawesome.com/5efd6bd50f.js" crossorigin="anonymous"></script>
+    <style>
+        #nav .search-box,
+        #nav .mobile-search-btn {
+            display: none !important;
+        }
+
+        .discover-sticky-header {
+            position: sticky;
+            top: 70px;
+            background-color: var(--bg-main);
+            z-index: 100;
+            padding-top: 10px;
+            padding-bottom: 15px;
+            margin-bottom: 1rem;
+        }
+
+        .discover-search-box {
+            position: relative;
+            width: 100%;
+            margin-bottom: 1.5rem;
+        }
+
+        .discover-search-box .search-icon {
+            position: absolute;
+            left: 1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 1.2rem;
+        }
+
+        .discover-search-box input {
+            width: 100%;
+            padding: 1.2rem 1.5rem 1.2rem 3.8rem;
+            border-radius: 1.5rem;
+            border: 1px solid var(--bg-element);
+            background-color: var(--bg-panel);
+            color: var(--text-main);
+            font-size: 1.1rem;
+            outline: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+        }
+
+        .discover-search-box input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-mid-opacity), 0 8px 24px rgba(0, 0, 0, 0.2);
+            background-color: #121117;
+        }
+
+        .discover-sticky-header .filters {
+            display: flex;
+            gap: 10px;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            padding-bottom: 10px;
+        }
+
+        .discover-sticky-header .filters::-webkit-scrollbar {
+            height: 0px;
+            background: transparent;
+        }
+
+        .discover-sticky-header .filters .btn {
+            flex-shrink: 0;
+            white-space: nowrap;
+            align-self: flex-start;
+        }
+
+        #nav .search-box,
+        #nav .mobile-search-btn {
+            display: none !important;
+        }
+
+        #nav .header-actions {
+            margin-left: auto;
+        }
+    </style>
 </head>
 
 <body>
-    <!-- Fixed UI -->
     <div id="nav"></div>
-    <!-- Normal UI -->
+
     <main>
         <article>
-            <div class="path">
-                <small>| ค้นหา</small>
-            </div>
-            <div class="filters">
-                <button class="btn btn-active" data-category="all">ทั้งหมด</button>
-                <button class="btn" data-category="กรองน้ำมันเครื่อง">กรองน้ำมันเครื่อง</button>
-                <button class="btn" data-category="น้ำมันเครื่อง">น้ำมันเครื่อง</button>
-                <button class="btn" data-category="ดูแลรักษารถ">ดูแลรักษารถ</button>
-                <button class="btn" data-category="น้ำมันเฟืองท้าย">น้ำมันเฟืองท้าย</button>
-                <button class="btn" data-category="ชุดเปลี่ยนถ่ายน้ำมันเครื่อง">ชุดเปลี่ยนถ่ายน้ำมันเครื่อง</button>
-            </div>
-            <div class="product-list" id="productList">
-
-            </div>
-        </article>
-        <script src="products.js"></script>
-        <script>
-            const productList = document.getElementById("productList");
-            const filterButtons = document.querySelectorAll(".filters .btn");
-
-            // สร้างสถานะเริ่มต้น (Global State)
-            let currentCategory = "all";
-            let currentSearch = "";
-
-            /**
-             * ฟังก์ชันหลักในการกรองและแสดงผลสินค้า
-             */
-            function displayProducts() {
-                // 1. ล้างข้อมูลหน้าจอเดิม
-                productList.innerHTML = "";
-
-                // 2. กรองสินค้าตาม Category และ Search Query พร้อมกัน
-                const filteredProducts = products.filter(product => {
-                    const matchesCategory = currentCategory === "all" || product.category === currentCategory;
-                    const matchesSearch = product.name.toLowerCase().includes(currentSearch.toLowerCase());
-                    return matchesCategory && matchesSearch;
-                });
-
-                // 3. ตรวจสอบกรณีไม่พบสินค้า
-                if (filteredProducts.length < 1) {
-                    productList.innerHTML = `<div class="productList-Text"><h2>ไม่พบสินค้า</h2></div>`;
-                    return;
-                }
-
-                // 4. วนลูปสร้าง Card สินค้า
-                filteredProducts.forEach(product => {
-                    const soldCount = product.sold || "0";
-                    const ratingScore = product.rating || "N/A";
-
-                    const html = `
-            <div class="product" onclick="viewProduct('${product.name}')" style="cursor: pointer;">
-                <img src="${product.img_src}" alt="${product.name}">
-                <div class="product-details">
-                    <div class="product-top">
-                        <h4>${product.name}</h4>
-                        <small style="color: var(--text-muted);">${product.category}</small>
-                        <p style="color: var(--accent); font-weight: bold;">
-                            <i class="fa-solid fa-baht-sign"></i> ${product.price.toLocaleString()}
-                        </p>
-                    </div>
-                    <div class="product-bottom">
-                        <span class="badge badge-yellow"><i class="fa-solid fa-star"></i> ${ratingScore}</span>
-                        <span style="font-size: 0.8rem; color: var(--text-muted);">ขายแล้ว ${soldCount}</span>
-                    </div>
+            <div class="discover-sticky-header">
+                <div class="path">
+                    <small><a href="index.html">หน้าแรก</a> / ค้นหาสินค้าทั้งหมด</small>
                 </div>
-            </div>`;
-                    productList.insertAdjacentHTML('beforeend', html);
-                });
-            }
 
-            /**
-             * จัดการ Event ต่างๆ
-             */
-            window.addEventListener("DOMContentLoaded", () => {
-                // แสดงผลครั้งแรก
-                displayProducts();
+                <div class="discover-search-box">
+                    <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                    <input type="text" id="discoverSearchInput"
+                        placeholder="ค้นหาน้ำมันเครื่อง, อะไหล่ หรือการดูแลรักษารถ...">
+                </div>
 
-                // ตัวจัดการปุ่ม Filter
-                filterButtons.forEach(button => {
-                    button.addEventListener("click", () => {
-                        filterButtons.forEach(btn => btn.classList.remove("btn-active"));
-                        button.classList.add("btn-active");
-                        currentCategory = button.getAttribute("data-category");
-                        displayProducts();
-                    });
-                });
+                <div class="filters">
+                    <button class="btn btn-active" data-category="all">ทั้งหมด</button>
+                    <button class="btn" data-category="กรองน้ำมันเครื่อง">กรองน้ำมันเครื่อง</button>
+                    <button class="btn" data-category="น้ำมันเครื่อง">น้ำมันเครื่อง</button>
+                    <button class="btn" data-category="ดูแลรักษารถ">ดูแลรักษารถ</button>
+                    <button class="btn" data-category="น้ำมันเฟืองท้าย">น้ำมันเฟืองท้าย</button>
+                    <button class="btn" data-category="ชุดเปลี่ยนถ่ายน้ำมันเครื่อง">ชุดเปลี่ยนถ่ายน้ำมันเครื่อง</button>
+                </div>
+            </div>
 
-                // โหลด Navbar และจัดการ Search Input (กรณีโหลดจากไฟล์ภายนอก)
-                fetch('nav.html')
-                    .then(response => response.text())
-                    .then(data => {
-                        document.getElementById('nav').innerHTML = data;
-                        setActiveNav();
+            <div class="product-list" id="productList">
+            </div>
 
-                        // ผูก Event Search หลังจากโหลด Nav เสร็จ
-                        const searchInput = document.getElementById("searchInput");
-                        if (searchInput) {
-                            searchInput.addEventListener("input", (e) => {
-                                currentSearch = e.target.value;
-                                displayProducts();
-                            });
-                        }
-                    })
-                    .catch(error => console.error('Error loading nav:', error));
+        </article>
+    </main>
+
+    <script src="products.js"></script>
+    <script>
+        const productList = document.getElementById("productList");
+        const filterButtons = document.querySelectorAll(".filters .btn");
+        const discoverSearchInput = document.getElementById("discoverSearchInput");
+
+        let currentCategory = "all";
+        let currentSearch = "";
+
+        function displayProducts() {
+            productList.innerHTML = "";
+
+            const filteredProducts = products.filter(product => {
+                const matchesCategory = currentCategory === "all" || product.category === currentCategory;
+                const matchesSearch = product.name.toLowerCase().includes(currentSearch.toLowerCase());
+                return matchesCategory && matchesSearch;
             });
 
-            /**
-             * ฟังก์ชันสำหรับดูรายละเอียดสินค้า
-             */
-            function viewProduct(name) {
-                const product = products.find(p => p.name === name);
-                if (product) {
-                    localStorage.setItem("selected_product", JSON.stringify({
-                        name: product.name,
-                        img: product.img_src,
-                        category: product.category,
-                        price: product.price,
-                        rating: product.rating,
-                        sold: product.sold
-                    }));
-                    window.location.href = "view_product.html";
-                }
+            if (filteredProducts.length < 1) {
+                productList.innerHTML = `
+                    <div class="productList-Text" style="grid-column: 1/-1; text-align: center; padding: 4rem 1rem; opacity: 0.6;">
+                        <i class="fa-solid fa-box-open" style="font-size: 4rem; margin-bottom: 1.5rem; color: var(--text-muted);"></i>
+                        <h2 style="margin-bottom: 0.5rem;">ไม่พบสินค้าที่คุณค้นหา</h2>
+                        <p>ลองเปลี่ยนคำค้นหา หรือเลือกหมวดหมู่สินค้าด้านบนใหม่</p>
+                    </div>`;
+                return;
             }
-        </script>
+
+            filteredProducts.forEach(product => {
+                const soldCount = product.sold || "0";
+                const ratingScore = product.rating || "N/A";
+
+                const html = `
+                <div class="product" onclick="viewProduct('${encodeURIComponent(product.name)}')" style="cursor: pointer;">
+                    <img src="${product.img_src}" alt="${product.name}">
+                    <div class="product-details">
+                        <div class="product-top">
+                            <h4>${product.name}</h4>
+                            <small style="color: var(--text-muted);">${product.category}</small>
+                            <p style="color: var(--accent); font-weight: bold;">
+                                <i class="fa-solid fa-baht-sign"></i> ${product.price.toLocaleString()}
+                            </p>
+                        </div>
+                        <div class="product-bottom">
+                            <span class="badge badge-yellow"><i class="fa-solid fa-star"></i> ${ratingScore}</span>
+                            <span style="font-size: 0.8rem; color: var(--text-muted);">ขายแล้ว ${soldCount}</span>
+                        </div>
+                    </div>
+                </div>`;
+                productList.insertAdjacentHTML('beforeend', html);
+            });
+        }
+
+        window.addEventListener("DOMContentLoaded", () => {
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const searchParam = urlParams.get('search');
+
+            if (searchParam) {
+                currentSearch = searchParam;
+                discoverSearchInput.value = searchParam;
+            }
+
+            displayProducts();
+
+            discoverSearchInput.addEventListener("input", (e) => {
+                currentSearch = e.target.value;
+                displayProducts();
+
+                const newUrl = new URL(window.location);
+                if (currentSearch) {
+                    newUrl.searchParams.set('search', currentSearch);
+                } else {
+                    newUrl.searchParams.delete('search');
+                }
+                window.history.replaceState({}, '', newUrl);
+            });
+
+            filterButtons.forEach(button => {
+                button.addEventListener("click", () => {
+                    filterButtons.forEach(btn => btn.classList.remove("btn-active"));
+                    button.classList.add("btn-active");
+                    currentCategory = button.getAttribute("data-category");
+
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+                    displayProducts();
+                });
+            });
+
+            fetch('nav.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('nav').innerHTML = data;
+                    setActiveNav();
+                })
+                .catch(error => console.error(error));
+        });
+
+        function setActiveNav() {
+            let currentPath = window.location.pathname.split("/").pop();
+            if (currentPath === "" || currentPath === undefined) {
+                currentPath = "index.html";
+            }
+            const navLinks = document.querySelectorAll('.site-sidebar ul li a, .bottom-nav ul li a');
+            navLinks.forEach(link => {
+                link.classList.remove('nav-active');
+                if (link.getAttribute('href') === currentPath) {
+                    link.classList.add('nav-active');
+                }
+            });
+        }
+
+        function viewProduct(encodedName) {
+            const name = decodeURIComponent(encodedName);
+            const product = products.find(p => p.name === name);
+            if (product) {
+                localStorage.setItem("selected_product", JSON.stringify({
+                    name: product.name,
+                    img: product.img_src,
+                    category: product.category,
+                    price: product.price,
+                    rating: product.rating,
+                    sold: product.sold || "0"
+                }));
+                window.location.href = "view_product.html";
+            }
+        }
+    </script>
 </body>
 
 </html>
