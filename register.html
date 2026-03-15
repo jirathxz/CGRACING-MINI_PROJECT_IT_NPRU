@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="style.css">
     <script src="https://kit.fontawesome.com/5efd6bd50f.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="auth.js"></script>
     <style>
         .auth-container {
             max-width: 400px;
@@ -35,6 +36,13 @@
             font-size: 0.9rem;
         }
 
+        .closed-notice {
+            color: #e24242;
+            font-weight: 600;
+            margin-top: 10px;
+            font-size: 0.95rem;
+        }
+
         .auth-footer {
             margin-top: 2rem;
             text-align: center;
@@ -53,12 +61,29 @@
             text-decoration: underline;
         }
 
+        .form-disabled {
+            opacity: 0.5; 
+        }
+
+        .form-control:disabled {
+            background-color: var(--bg-element); 
+            cursor: not-allowed; 
+            color: #888;
+        }
+
         .btn-register {
             width: 100%;
             padding: 1rem;
             font-size: 1.05rem;
             font-weight: 600;
             margin-top: 0.5rem;
+        }
+
+        .btn-disabled-style {
+            background-color: #555 !important;
+            color: #aaa !important;
+            cursor: not-allowed;
+            border: none;
         }
 
         .swal2-popup {
@@ -72,40 +97,39 @@
 
     <main>
         <article>
-            <div class="path">
-                <small><a href="index.html">หน้าแรก</a> / สมัครสมาชิก</small>
-            </div>
-
             <div class="auth-container">
+                <div class="web-name" style="margin-bottom: 2rem; transform: scale(1.5); text-align: center;">
+                    <p class="main-text">CG</p>
+                    <p class="sub-text">RACING</p>
+                </div>
                 <div class="auth-header">
                     <h2>สร้างบัญชีใหม่</h2>
                     <p>ร่วมเป็นส่วนหนึ่งของครอบครัว CG RACING</p>
+                    <p class="closed-notice"><i class="fa-solid fa-lock"></i> ปิดรับสมัครชั่วคราว (ทดสอบระบบ)</p>
                 </div>
 
-                <form id="registerForm">
+                <form id="registerForm" class="form-disabled">
                     <div class="form-group">
                         <label for="username">ชื่อผู้ใช้</label>
-                        <input type="text" id="username" class="form-control" placeholder="เช่น somchai_777" required>
+                        <input type="text" id="username" class="form-control" placeholder="เช่น somchai_777" disabled>
                     </div>
 
                     <div class="form-group">
                         <label for="email">อีเมล</label>
-                        <input type="email" id="email" class="form-control" placeholder="example@mail.com" required>
+                        <input type="email" id="email" class="form-control" placeholder="example@mail.com" disabled>
                     </div>
 
                     <div class="form-group">
                         <label for="password">รหัสผ่าน</label>
-                        <input type="password" id="password" class="form-control" placeholder="รหัสผ่านอย่างน้อย 6 ตัว"
-                            required minlength="6">
+                        <input type="password" id="password" class="form-control" placeholder="รหัสผ่านอย่างน้อย 6 ตัว" disabled>
                     </div>
 
                     <div class="form-group">
                         <label for="confirm-password">ยืนยันรหัสผ่านอีกครั้ง</label>
-                        <input type="password" id="confirm-password" class="form-control" placeholder="กรอกรหัสผ่านเดิม"
-                            required minlength="6">
+                        <input type="password" id="confirm-password" class="form-control" placeholder="กรอกรหัสผ่านเดิม" disabled>
                     </div>
 
-                    <button type="submit" class="btn btn-active btn-register">
+                    <button type="submit" class="btn btn-disabled-style btn-register">
                         <i class="fa-solid fa-user-plus"></i> สมัครสมาชิก
                     </button>
                 </form>
@@ -121,7 +145,10 @@
         fetch('nav.html')
             .then(response => response.text())
             .then(data => {
-                document.getElementById('nav').innerHTML = data;
+                const navElement = document.getElementById('nav');
+                navElement.innerHTML = '';
+                const fragment = document.createRange().createContextualFragment(data);
+                navElement.appendChild(fragment);
                 setActiveNav();
             })
             .catch(error => console.error(error));
@@ -142,30 +169,13 @@
 
         document.getElementById('registerForm').addEventListener('submit', function (e) {
             e.preventDefault();
-            const password = document.getElementById('password').value;
-            const confirm = document.getElementById('confirm-password').value;
-
-            if (password !== confirm) {
-                Swal.fire({
-                    title: 'เกิดข้อผิดพลาด!',
-                    text: 'รหัสผ่านและการยืนยันรหัสผ่านไม่ตรงกัน',
-                    icon: 'error',
-                    confirmButtonColor: '#e24242',
-                    confirmButtonText: 'ลองอีกครั้ง'
-                });
-                return;
-            }
 
             Swal.fire({
-                title: 'สมัครสมาชิกสำเร็จ!',
-                text: 'บัญชีของคุณถูกสร้างเรียบร้อยแล้ว',
-                icon: 'success',
-                confirmButtonColor: '#198754',
-                confirmButtonText: 'ไปหน้าเข้าสู่ระบบ',
-                timer: 3000,
-                timerProgressBar: true
-            }).then(() => {
-                window.location.href = "login.html";
+                title: 'ปิดรับสมัครชั่วคราว!',
+                text: 'ขออภัย ขณะนี้ CG RACING ยังไม่เปิดรับสมาชิกใหม่ กรุณาติดตามประกาศอีกครั้งในภายหลัง',
+                icon: 'warning',
+                confirmButtonColor: '#e24242',
+                confirmButtonText: 'ตกลง'
             });
         });
     </script>

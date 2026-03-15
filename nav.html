@@ -1,4 +1,115 @@
-<header class="site-header">
+<style>
+    .notification-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+
+    .noti-badge {
+        position: absolute;
+        top: -4px;
+        right: -4px;
+        background-color: #e24242;
+        color: white;
+        font-size: 0.65rem;
+        font-weight: bold;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        pointer-events: none; 
+    }
+
+    .notification-panel {
+        display: none;
+        position: absolute;
+        top: 40px; 
+        right: -10px; 
+        width: 300px;
+        background-color: var(--bg-panel, #ffffff);
+        border: 1px solid var(--bg-element, #e4e5e7);
+        border-radius: 0.8rem;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        z-index: 1000;
+        flex-direction: column;
+        overflow: hidden;
+    }
+
+    .notification-panel.show {
+        display: flex;
+    }
+
+    .noti-header {
+        padding: 1rem;
+        font-weight: 700;
+        border-bottom: 1px solid var(--bg-element, #e4e5e7);
+        color: var(--text-main, #333);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .noti-header small {
+        color: var(--accent, #e24242);
+        cursor: pointer;
+        font-weight: normal;
+    }
+
+    .noti-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        max-height: 350px;
+        overflow-y: auto;
+    }
+
+    .noti-list li {
+        padding: 1rem;
+        border-bottom: 1px solid var(--bg-element, #f0f0f0);
+        display: flex;
+        gap: 12px;
+        align-items: flex-start;
+        cursor: pointer;
+        transition: background-color 0.2s;
+    }
+
+    .noti-list li:hover {
+        background-color: var(--bg-element, #f9f9f9);
+    }
+
+    .noti-list li:last-child {
+        border-bottom: none;
+    }
+
+    .noti-icon {
+        background-color: rgba(226, 66, 66, 0.1);
+        color: #e24242;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-shrink: 0;
+        font-size: 1.1rem;
+    }
+
+    .noti-detail p {
+        margin: 0 0 0.3rem 0;
+        font-size: 0.95rem;
+        color: var(--text-main, #333);
+        line-height: 1.3;
+    }
+
+    .noti-detail small {
+        color: var(--text-muted, #888);
+        font-size: 0.8rem;
+    }
+</style>
+
+<header class="site-header" id="site-header">
     <div class="web-name web-name-mobile">
         <p class="main-text">CG</p>
         <p class="sub-text">RACING</p>
@@ -12,14 +123,51 @@
     <div class="header-actions">
         <a href="discover.html" class="mobile-search-btn"><i class="fa-solid fa-magnifying-glass"></i></a>
 
-        <a href="#"><i class="fa-solid fa-bell"></i></a>
-        <a href="product_cart.html"><i class="fa-solid fa-cart-shopping"></i></a>
+        <div class="notification-wrapper">
+            <a href="#" id="notiToggleBtn">
+                <i class="fa-solid fa-bell"></i>
+                <span class="noti-badge">2</span> 
+            </a>
+            
+            <div class="notification-panel" id="notiPanel">
+                <div class="noti-header">
+                    การแจ้งเตือน
+                    <small>อ่านทั้งหมดแล้ว</small>
+                </div>
+                <ul class="noti-list">
+                    <li>
+                        <div class="noti-icon"><i class="fa-solid fa-box-open"></i></div>
+                        <div class="noti-detail">
+                            <p>พัสดุของคุณถูกจัดส่งแล้ว</p>
+                            <small>หมายเลขพัสดุ: TH123456789</small><br>
+                            <small><i class="fa-regular fa-clock"></i> 2 ชั่วโมงที่แล้ว</small>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="noti-icon" style="color: #1dbf73; background-color: rgba(29, 191, 115, 0.1);"><i class="fa-solid fa-percent"></i></div>
+                        <div class="noti-detail">
+                            <p>โปรเด็ดประจำสัปดาห์!</p>
+                            <small>ลดราคาน้ำมันเครื่อง 20% ด่วน!</small><br>
+                            <small><i class="fa-regular fa-clock"></i> 1 วันที่แล้ว</small>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="notification-wrapper">
+            <a href="product_cart.html">
+                <i class="fa-solid fa-cart-shopping"></i>
+                <span class="noti-badge" id="cartBadge" style="display: none;">0</span>
+            </a>
+        </div>
+
         <a href="#"><i class="fa-solid fa-moon"></i></a>
-        <a href="#" class="user-profile"><img src="http://placehold.co/36x36" alt=""></a>
+        <a href="profile.html" class="user-profile"><img src="http://placehold.co/36x36" alt=""></a>
     </div>
 </header>
 
-<aside class="site-sidebar">
+<aside class="site-sidebar" id="site-sidebar">
     <div class="sidebar-header">
         <div class="web-name">
             <p class="main-text">CG</p>
@@ -43,21 +191,72 @@
         <li><a href="seller.html" class="nav-link"><i class="fa-solid fa-grip"></i><span>ผู้ขาย</span></a></li>
     </ul>
 </nav>
-<script>
-    const nav_page = document.getElementById("nav_page")
-    const isLoggedIn = localStorage.getItem("isLoggedIn")
-    const sidebarHeader = document.getElementById("sidebarHeader")
 
-    window.addEventListener("DOMContentLoaded", () => {
+<script>
+    (function () {
+        const siteHeader = document.getElementById("site-header");
+        const siteSidebar = document.getElementById("site-sidebar");
+        const navPage = document.getElementById("nav_page"); 
         const isLoggedIn = localStorage.getItem("isLoggedIn");
 
-        if (isLoggedIn === null || isLoggedIn === "false") {
-            localStorage.setItem("isLoggedIn", "true");
-            console.log("สถานะถูกเปลี่ยนเป็น Logged In แล้ว");
+        if (navPage) {
+            if (isLoggedIn === "true") {
+                siteHeader.style.display = "flex";
+                siteSidebar.style.display = "flex";
+            } else {
+                siteHeader.style.display = "none";
+                siteSidebar.style.display = "none";
+            }
         }
 
-        if (typeof setActiveNav === "function") {
-            setActiveNav();
+        const notiToggleBtn = document.getElementById("notiToggleBtn");
+        const notiPanel = document.getElementById("notiPanel");
+
+        if (notiToggleBtn && notiPanel) {
+            notiToggleBtn.addEventListener("click", function (e) {
+                e.preventDefault(); 
+                notiPanel.classList.toggle("show"); 
+            });
+
+            document.addEventListener("click", function (e) {
+                if (!notiToggleBtn.contains(e.target) && !notiPanel.contains(e.target)) {
+                    notiPanel.classList.remove("show"); 
+                }
+            });
         }
-    })
+
+        const cartBadge = document.getElementById("cartBadge");
+        let lastCartCount = -1;
+
+        function checkCartLoop() {
+            if (!cartBadge) return;
+            try {
+                const cartData = localStorage.getItem("productCart");
+                let currentCount = 0;
+
+                if (cartData) {
+                    const cartArray = JSON.parse(cartData);
+                    if (Array.isArray(cartArray)) {
+                        currentCount = cartArray.length;
+                    }
+                }
+
+                if (currentCount !== lastCartCount) {
+                    if (currentCount > 0) {
+                        cartBadge.textContent = currentCount;
+                        cartBadge.style.display = "flex"; 
+                    } else {
+                        cartBadge.style.display = "none"; 
+                    }
+                    lastCartCount = currentCount;
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        checkCartLoop();
+        setInterval(checkCartLoop, 500); 
+
+    })();
 </script>

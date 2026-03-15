@@ -124,10 +124,15 @@
         fetch('nav.html')
             .then(response => response.text())
             .then(data => {
-                document.getElementById('nav').innerHTML = data;
+                const navElement = document.getElementById('nav');
+
+                navElement.innerHTML = '';
+                const fragment = document.createRange().createContextualFragment(data);
+                navElement.appendChild(fragment);
+
                 setActiveNav();
             })
-            .catch(error => console.error('Error loading nav:', error));
+            .catch(error => console.error('Error fetching nav:', error));
 
         function setActiveNav() {
             const currentPath = window.location.pathname.split("/").pop() || "index.html";
