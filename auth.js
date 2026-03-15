@@ -7,7 +7,6 @@ window.addEventListener("DOMContentLoaded", () => {
     }
 
     if (isLoggedIn !== "true") {
-
         const nav_page = document.getElementById("nav_page");
         if (nav_page) {
             nav_page.style.display = "none";
@@ -15,13 +14,13 @@ window.addEventListener("DOMContentLoaded", () => {
 
         console.log("ระบบ: ไม่ได้ล็อกอิน");
 
-        if (currentPath !== "/CGRACING-MINI_PROJECT_IT_NPRU/login.html" && currentPath !== "/CGRACING-MINI_PROJECT_IT_NPRU/register.html") {
+        if (!currentPath.endsWith("login.html") && !currentPath.endsWith("register.html")) {
             console.log("ไม่อนุญาตให้เข้าถึงหน้า: " + currentPath + " กำลังพากลับไปหน้าเข้าสู่ระบบ...");
-            window.location.href = "/CGRACING-MINI_PROJECT_IT_NPRU/login.html";
+            window.location.href = "login.html";
         }
     } else { 
-        if (currentPath == "/CGRACING-MINI_PROJECT_IT_NPRU/login.html" || currentPath == "/CGRACING-MINI_PROJECT_IT_NPRU/register.html") {
-            window.location.href = "/CGRACING-MINI_PROJECT_IT_NPRU/index.html";
+        if (currentPath.endsWith("login.html") || currentPath.endsWith("register.html")) {
+            window.location.href = "index.html";
         }
     }
 });
