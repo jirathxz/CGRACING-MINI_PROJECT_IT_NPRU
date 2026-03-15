@@ -15,13 +15,13 @@ window.addEventListener("DOMContentLoaded", () => {
 
         console.log("ระบบ: ไม่ได้ล็อกอิน");
 
-        if (currentPath !== "/login.html" && currentPath !== "/register.html") {
+        if (currentPath !== "/login.html" && currentPath !== "/CGRACING-MINI_PROJECT_IT_NPRU/register.html") {
             console.log("ไม่อนุญาตให้เข้าถึงหน้า: " + currentPath + " กำลังพากลับไปหน้าเข้าสู่ระบบ...");
-            window.location.href = "/login.html";
+            window.location.href = "/CGRACING-MINI_PROJECT_IT_NPRU/login.html";
         }
     } else { 
-        if (currentPath == "/login.html" || currentPath == "/register.html") {
-            window.location.href = "/index.html";
+        if (currentPath == "/login.html" || currentPath == "/CGRACING-MINI_PROJECT_IT_NPRU/register.html") {
+            window.location.href = "/CGRACING-MINI_PROJECT_IT_NPRU/index.html";
         }
     }
 });
