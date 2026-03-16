@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - CG RACING</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://kit.fontawesome.com/5efd6bd50f.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <script src="auth.js"></script>
+    <style>
+        #nav .search-box,
+        #nav .mobile-search-btn {
+            display: none !important;
+        }
+
+        #nav .header-actions {
+            margin-left: auto;
+        }
+
+        main {
+            margin-top: 5rem; 
+        }
+
+        .dashboard-container {
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto 2rem auto;
+            padding: 0 1.5rem;
+            align-items: start;
+        }
+
+        .profile-sidebar {
+            background-color: var(--bg-panel);
+            border: 1px solid var(--bg-element);
+            border-radius: 0.8rem;
+            padding: 2rem 1.5rem;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .admin-badge {
+            display: inline-block;
+            background-color: #e24242;
+            color: white;
+            padding: 0.3rem 1rem;
+            border-radius: 1rem;
+            font-size: 0.85rem;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 8px rgba(226, 66, 66, 0.4);
+        }
+
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 1rem;
+            display: block;
+            border: 4px solid var(--accent);
+        }
+
+        .profile-name {
+            font-size: 1.3rem;
+            color: var(--text-main);
+            margin-bottom: 0.2rem;
+            font-weight: 700;
+        }
+
+        .profile-username {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .profile-stats {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 1.5rem 0;
+            text-align: left;
+            border-top: 1px solid var(--bg-element);
+            padding-top: 1.5rem;
+        }
+
+        .profile-stats li {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+
+        .profile-stats li .stat-label { color: var(--text-muted); }
+        .profile-stats li .stat-value { color: var(--text-main); font-weight: 600; }
+
+        .btn-logout {
+            width: 100%;
+            padding: 0.8rem;
+            background-color: transparent;
+            border: 1px solid #e24242;
+            color: #e24242;
+            border-radius: 0.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-logout:hover {
+            background-color: #e24242;
+            color: white;
+        }
+
+        .dashboard-content {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .content-header {
+            background-color: var(--bg-panel);
+            border: 1px solid var(--bg-element);
+            border-radius: 0.8rem;
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .content-header h3 {
+            font-size: 1.2rem;
+            color: var(--text-main);
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .create-product-card {
+            background-color: var(--bg-panel);
+            border: 2px dashed var(--accent);
+            border-radius: 0.8rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 280px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--text-main);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .create-product-card:hover {
+            background-color: rgba(226, 66, 66, 0.05);
+            transform: translateY(-5px);
+        }
+
+        .create-icon {
+            width: 60px;
+            height: 60px;
+            background-color: var(--accent);
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 10px rgba(226, 66, 66, 0.3);
+        }
+
+        .product-card {
+            background-color: var(--bg-panel);
+            border: 1px solid var(--bg-element);
+            border-radius: 0.8rem;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .product-img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-bottom: 1px solid var(--bg-element);
+        }
+
+        .product-body {
+            padding: 1.2rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .product-body h4 {
+            font-size: 1rem;
+            margin: 0.5rem 0;
+            line-height: 1.4;
+        }
+
+        .product-body .price {
+            color: var(--accent);
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-top: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .swal2-popup { font-family: 'Prompt', sans-serif !important; }
+    </style>
+</head>
+
+<body>
+    <div id="nav"></div>
+
+    <main>
+        <div class="dashboard-container">
+            <aside class="profile-sidebar">
+                <div class="admin-badge"><i class="fa-solid fa-shield-halved"></i> Administrator</div>
+                <img src="http://placehold.co/150x150" alt="Admin Profile" class="profile-avatar">
+                <h2 class="profile-name">CG RACING</h2>
+                <p class="profile-username">@cgracing</p>
+                
+                <ul class="profile-stats">
+                    <li>
+                        <span class="stat-label"><i class="fa-solid fa-box"></i> สินค้าทั้งหมด</span>
+                        <span class="stat-value" id="totalProducts">0 รายการ</span>
+                    </li>
+                    <li>
+                        <span class="stat-label"><i class="fa-solid fa-cart-shopping"></i> ยอดขายเดือนนี้</span>
+                        <span class="stat-value">45 ออเดอร์</span>
+                    </li>
+                    <li>
+                        <span class="stat-label"><i class="fa-solid fa-users"></i> สมาชิกในระบบ</span>
+                        <span class="stat-value">128 คน</span>
+                    </li>
+                </ul>
+
+                <button class="btn-logout" id="logoutBtn">
+                    <i class="fa-solid fa-right-from-bracket"></i> ออกจากระบบ
+                </button>
+            </aside>
+
+            <section class="dashboard-content">
+                <div class="content-header">
+                    <h3><i class="fa-solid fa-store" style="color: var(--accent);"></i> สินค้าของคุณ (Your Product)</h3>
+                </div>
+
+                <div class="product-grid" id="adminProductGrid">
+                    <div class="create-product-card" onclick="window.location.href='seller.html'">
+                        <div class="create-icon">
+                            <i class="fa-solid fa-plus"></i>
+                        </div>
+                        <strong style="font-size: 1.1rem;">เพิ่มสินค้าใหม่</strong>
+                        <small style="color: var(--text-muted); margin-top: 5px;">คลิกเพื่อไปยังหน้าลงขายสินค้า</small>
+                    </div>
+
+                    </div>
+            </section>
+        </div>
+    </main>
+
+    <script src="products.js"></script>
+    <script>
+        fetch('nav.html')
+            .then(response => response.text())
+            .then(data => {
+                const navElement = document.getElementById('nav');
+                navElement.innerHTML = '';
+                const fragment = document.createRange().createContextualFragment(data);
+                navElement.appendChild(fragment);
+                setActiveNav();
+            })
+            .catch(error => console.error(error));
+
+        function setActiveNav() {
+            let currentPath = window.location.pathname.split("/").pop();
+            if (currentPath === "" || currentPath === undefined) currentPath = "index.html";
+            document.querySelectorAll('.site-sidebar ul li a, .bottom-nav ul li a').forEach(link => {
+                link.classList.remove('nav-active');
+                if (link.getAttribute('href') === currentPath) link.classList.add('nav-active');
+            });
+        }
+
+        window.addEventListener("DOMContentLoaded", () => {
+            const isLoggedIn = localStorage.getItem("isLoggedIn");
+            const userEmail = localStorage.getItem("userEmail");
+
+            if (isLoggedIn !== "true" || userEmail !== "cgracing") {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'ไม่มีสิทธิ์เข้าถึง',
+                    text: 'หน้านี้สำหรับผู้ดูแลระบบ (Administrator) เท่านั้น',
+                    confirmButtonColor: '#e24242'
+                }).then(() => {
+                    window.location.href = "login.html";
+                });
+                return;
+            }
+
+            renderAdminProducts();
+
+            document.getElementById("logoutBtn").addEventListener("click", () => {
+                Swal.fire({
+                    title: 'ออกจากระบบ?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#e24242',
+                    cancelButtonColor: '#555',
+                    confirmButtonText: 'ใช่, ออกจากระบบ',
+                    cancelButtonText: 'ยกเลิก'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        localStorage.setItem("isLoggedIn", "false");
+                        localStorage.removeItem("userEmail");
+                        window.location.href = "login.html";
+                    }
+                });
+            });
+        });
+
+        function renderAdminProducts() {
+            const grid = document.getElementById("adminProductGrid");
+            document.getElementById("totalProducts").textContent = `${products.length} รายการ`;
+
+            products.forEach(product => {
+                const html = `
+                <div class="product-card">
+                    <img src="${product.img_src}" alt="${product.name}" class="product-img">
+                    <div class="product-body">
+                        <div>
+                            <small style="color: var(--text-muted);">${product.category}</small>
+                            <h4>${product.name}</h4>
+                        </div>
+                        <div class="price">฿${product.price.toLocaleString()}</div>
+                    </div>
+                </div>`;
+                grid.insertAdjacentHTML('beforeend', html);
+            });
+        }
+    </script>
+</body>
+
+</html>
