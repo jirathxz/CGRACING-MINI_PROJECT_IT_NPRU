@@ -204,11 +204,11 @@
             if (isLoggedIn === "true") {
                 siteHeader.style.display = "flex";
                 siteSidebar.style.display = "flex";
-                bottomNav.style.display = "flex";
+                if(bottomNav.style.display == "flex") bottomNav.style.display = "flex";
             } else {
                 siteHeader.style.display = "none";
                 siteSidebar.style.display = "none";
-                bottomNav.style.display = "none";
+                if(bottomNav.style.display == "flex") bottomNav.style.display = "none";
             }
         }
 
