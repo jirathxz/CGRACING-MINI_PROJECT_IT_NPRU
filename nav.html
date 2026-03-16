@@ -182,7 +182,7 @@
     </ul>
 </aside>
 
-<nav class="bottom-nav">
+<nav class="bottom-nav" id="bottom-nav">
     <ul>
         <li><a href="index.html" class="nav-link"><i class="fa-solid fa-house"></i><span>หน้าหลัก</span></a></li>
         <li><a href="discover.html" class="nav-link"><i class="fa-solid fa-magnifying-glass"></i><span>ค้นหา</span></a>
@@ -196,6 +196,7 @@
     (function () {
         const siteHeader = document.getElementById("site-header");
         const siteSidebar = document.getElementById("site-sidebar");
+        const bottomNav = document.getElementById("bottom-nav")
         const navPage = document.getElementById("nav_page"); 
         const isLoggedIn = localStorage.getItem("isLoggedIn");
 
@@ -203,9 +204,11 @@
             if (isLoggedIn === "true") {
                 siteHeader.style.display = "flex";
                 siteSidebar.style.display = "flex";
+                bottomNav.style.display = "flex";
             } else {
                 siteHeader.style.display = "none";
                 siteSidebar.style.display = "none";
+                bottomNav.style.display = "none";
             }
         }
 
