@@ -19,14 +19,14 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        pointer-events: none; 
+        pointer-events: none;
     }
 
     .notification-panel {
         display: none;
         position: absolute;
-        top: 40px; 
-        right: -10px; 
+        top: 40px;
+        right: -10px;
         width: 300px;
         background-color: var(--bg-panel, #ffffff);
         border: 1px solid var(--bg-element, #e4e5e7);
@@ -126,9 +126,9 @@
         <div class="notification-wrapper">
             <a href="#" id="notiToggleBtn">
                 <i class="fa-solid fa-bell"></i>
-                <span class="noti-badge">2</span> 
+                <span class="noti-badge">2</span>
             </a>
-            
+
             <div class="notification-panel" id="notiPanel">
                 <div class="noti-header">
                     การแจ้งเตือน
@@ -144,7 +144,8 @@
                         </div>
                     </li>
                     <li>
-                        <div class="noti-icon" style="color: #1dbf73; background-color: rgba(29, 191, 115, 0.1);"><i class="fa-solid fa-percent"></i></div>
+                        <div class="noti-icon" style="color: #1dbf73; background-color: rgba(29, 191, 115, 0.1);"><i
+                                class="fa-solid fa-percent"></i></div>
                         <div class="noti-detail">
                             <p>โปรเด็ดประจำสัปดาห์!</p>
                             <small>ลดราคาน้ำมันเครื่อง 20% ด่วน!</small><br>
@@ -162,7 +163,7 @@
             </a>
         </div>
 
-        <a href="#"><i class="fa-solid fa-moon"></i></a>
+        <a href="#" id="themeToggle"><i class="fa-solid fa-moon" id="themeIcon"></i></a>
         <a href="profile.html" class="user-profile"><img src="http://placehold.co/36x36" alt=""></a>
     </div>
 </header>
@@ -197,18 +198,18 @@
         const siteHeader = document.getElementById("site-header");
         const siteSidebar = document.getElementById("site-sidebar");
         const bottomNav = document.getElementById("bottom-nav")
-        const navPage = document.getElementById("nav_page"); 
+        const navPage = document.getElementById("nav_page");
         const isLoggedIn = localStorage.getItem("isLoggedIn");
 
         if (navPage) {
             if (isLoggedIn === "true") {
                 siteHeader.style.display = "flex";
                 siteSidebar.style.display = "flex";
-                if(window.innerWidth < 768) bottomNav.style.display = "block";
+                if (window.innerWidth < 768) bottomNav.style.display = "block";
             } else {
                 siteHeader.style.display = "none";
                 siteSidebar.style.display = "none";
-                if(window.innerWidth < 768) bottomNav.style.display = "none";
+                if (window.innerWidth < 768) bottomNav.style.display = "none";
             }
         }
 
@@ -217,13 +218,13 @@
 
         if (notiToggleBtn && notiPanel) {
             notiToggleBtn.addEventListener("click", function (e) {
-                e.preventDefault(); 
-                notiPanel.classList.toggle("show"); 
+                e.preventDefault();
+                notiPanel.classList.toggle("show");
             });
 
             document.addEventListener("click", function (e) {
                 if (!notiToggleBtn.contains(e.target) && !notiPanel.contains(e.target)) {
-                    notiPanel.classList.remove("show"); 
+                    notiPanel.classList.remove("show");
                 }
             });
         }
@@ -247,9 +248,9 @@
                 if (currentCount !== lastCartCount) {
                     if (currentCount > 0) {
                         cartBadge.textContent = currentCount;
-                        cartBadge.style.display = "flex"; 
+                        cartBadge.style.display = "flex";
                     } else {
-                        cartBadge.style.display = "none"; 
+                        cartBadge.style.display = "none";
                     }
                     lastCartCount = currentCount;
                 }
@@ -259,7 +260,32 @@
         }
 
         checkCartLoop();
-        setInterval(checkCartLoop, 500); 
+        setInterval(checkCartLoop, 500);
 
     })();
+
+    const themeToggle = document.getElementById("themeToggle");
+    const themeIcon = document.getElementById("themeIcon");
+    const currentTheme = localStorage.getItem("theme") || "dark";
+
+    document.documentElement.setAttribute("data-theme", currentTheme);
+    updateThemeIcon(currentTheme);
+
+    if (themeToggle) {
+        themeToggle.addEventListener("click", function (e) {
+            e.preventDefault();
+            const targetTheme = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
+            document.documentElement.setAttribute("data-theme", targetTheme);
+            localStorage.setItem("theme", targetTheme);
+            updateThemeIcon(targetTheme);
+        });
+    }
+
+    function updateThemeIcon(theme) {
+        if (theme === "light") {
+            themeIcon.classList.replace("fa-moon", "fa-sun");
+        } else {
+            themeIcon.classList.replace("fa-sun", "fa-moon");
+        }
+    }
 </script>

@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="style.css">
     <script src="https://kit.fontawesome.com/5efd6bd50f.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    
+
     <script src="auth.js"></script>
     <style>
         .seller-header {
@@ -29,7 +29,7 @@
             background-color: var(--bg-panel);
             border: 1px solid var(--bg-element);
             border-radius: 1rem;
-            overflow-x: auto; 
+            overflow-x: auto;
             box-shadow: var(--shadow-soft);
         }
 
@@ -37,7 +37,7 @@
             width: 100%;
             border-collapse: collapse;
             text-align: left;
-            min-width: 700px; 
+            min-width: 700px;
         }
 
         .seller-table th,
@@ -132,7 +132,7 @@
             <div class="path">
                 <small><a href="index.html">หน้าแรก</a> / โหมดผู้ขาย</small>
             </div>
-            
+
             <div class="seller-header">
                 <h2>จัดการสินค้า</h2>
                 <button class="btn btn-primary" onclick="addProduct()">
@@ -161,14 +161,14 @@
                         </tr>
                     </thead>
                     <tbody id="sellerProductList">
-                        </tbody>
+                    </tbody>
                 </table>
             </div>
         </article>
     </main>
-
+    <footer id="footer"></footer>
     <script src="products.js"></script>
-    
+
     <script src="auth.js"></script>
     <script>
         const sellerProductList = document.getElementById("sellerProductList");
@@ -199,7 +199,7 @@
 
             filteredProducts.forEach((product, index) => {
                 const soldCount = product.sold || "0";
-                
+
                 const tr = document.createElement("tr");
                 tr.innerHTML = `
                     <td>
@@ -248,11 +248,22 @@
                     if (searchInput) {
                         searchInput.addEventListener("input", (e) => {
                             currentSearch = e.target.value;
-                            displaySellerProducts(); 
+                            displaySellerProducts();
                         });
                     }
                 })
                 .catch(error => console.error(error));
+            fetch('footer.html')
+                .then(response => response.text())
+                .then(data => {
+                    const navElement = document.getElementById('footer');
+
+                    navElement.innerHTML = '';
+                    const fragment = document.createRange().createContextualFragment(data);
+                    navElement.appendChild(fragment);
+
+                })
+                .catch(error => console.error('Error fetching footer:', error));
         });
 
         function setActiveNav() {

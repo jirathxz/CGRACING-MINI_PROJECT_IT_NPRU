@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="style.css">
     <script src="https://kit.fontawesome.com/5efd6bd50f.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    
+
     <script src="auth.js"></script>
     <style>
         #nav .search-box,
@@ -21,7 +21,7 @@
         }
 
         main {
-            margin-top: 5rem; 
+            margin-top: 5rem;
         }
 
         .dashboard-container {
@@ -40,7 +40,7 @@
             border-radius: 0.8rem;
             padding: 2rem 1.5rem;
             text-align: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
 
         .admin-badge {
@@ -94,8 +94,14 @@
             font-size: 0.95rem;
         }
 
-        .profile-stats li .stat-label { color: var(--text-muted); }
-        .profile-stats li .stat-value { color: var(--text-main); font-weight: 600; }
+        .profile-stats li .stat-label {
+            color: var(--text-muted);
+        }
+
+        .profile-stats li .stat-value {
+            color: var(--text-main);
+            font-weight: 600;
+        }
 
         .btn-logout {
             width: 100%;
@@ -132,7 +138,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
 
         .content-header h3 {
@@ -162,7 +168,7 @@
             cursor: pointer;
             transition: all 0.3s ease;
             color: var(--text-main);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
         }
 
         .create-product-card:hover {
@@ -191,7 +197,7 @@
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
 
         .product-img {
@@ -228,7 +234,9 @@
             }
         }
 
-        .swal2-popup { font-family: 'Prompt', sans-serif !important; }
+        .swal2-popup {
+            font-family: 'Prompt', sans-serif !important;
+        }
     </style>
 </head>
 
@@ -242,7 +250,7 @@
                 <img src="http://placehold.co/150x150" alt="Admin Profile" class="profile-avatar">
                 <h2 class="profile-name">CG RACING</h2>
                 <p class="profile-username">@cgracing</p>
-                
+
                 <ul class="profile-stats">
                     <li>
                         <span class="stat-label"><i class="fa-solid fa-box"></i> สินค้าทั้งหมด</span>
@@ -277,11 +285,11 @@
                         <small style="color: var(--text-muted); margin-top: 5px;">คลิกเพื่อไปยังหน้าลงขายสินค้า</small>
                     </div>
 
-                    </div>
+                </div>
             </section>
         </div>
     </main>
-
+    <footer id="footer"></footer>
     <script src="products.js"></script>
     <script>
         fetch('nav.html')
@@ -294,7 +302,17 @@
                 setActiveNav();
             })
             .catch(error => console.error(error));
+        fetch('footer.html')
+            .then(response => response.text())
+            .then(data => {
+                const navElement = document.getElementById('footer');
 
+                navElement.innerHTML = '';
+                const fragment = document.createRange().createContextualFragment(data);
+                navElement.appendChild(fragment);
+
+            })
+            .catch(error => console.error('Error fetching footer:', error));
         function setActiveNav() {
             let currentPath = window.location.pathname.split("/").pop();
             if (currentPath === "" || currentPath === undefined) currentPath = "index.html";

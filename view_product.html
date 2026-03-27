@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="style.css">
     <script src="https://kit.fontawesome.com/5efd6bd50f.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    
+
     <script src="auth.js"></script>
 </head>
 
@@ -68,6 +68,7 @@
             </div>
         </article>
     </main>
+    <footer id="footer"></footer>
     <script src="products.js"></script>
     <script>
         const product_img = document.getElementById("product_img")
@@ -135,7 +136,17 @@
                 setActiveNav();
             })
             .catch(error => console.error('Error fetching nav:', error));
+        fetch('footer.html')
+            .then(response => response.text())
+            .then(data => {
+                const navElement = document.getElementById('footer');
 
+                navElement.innerHTML = '';
+                const fragment = document.createRange().createContextualFragment(data);
+                navElement.appendChild(fragment);
+
+            })
+            .catch(error => console.error('Error fetching footer:', error));
         function setActiveNav() {
             const currentPath = window.location.pathname.split("/").pop() || "index.html";
             const navLinks = document.querySelectorAll('.site-sidebar ul li a');

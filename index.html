@@ -97,6 +97,7 @@
             </section>
         </article>
     </main>
+    <footer id="footer"></footer>
     <script src="products.js"></script>
     <script src="auth.js"></script>
     <script>
@@ -229,6 +230,17 @@
                     setActiveNav();
                 })
                 .catch(error => console.error('Error fetching nav:', error));
+            fetch('footer.html')
+                .then(response => response.text())
+                .then(data => {
+                    const navElement = document.getElementById('footer');
+
+                    navElement.innerHTML = '';
+                    const fragment = document.createRange().createContextualFragment(data);
+                    navElement.appendChild(fragment);
+
+                })
+                .catch(error => console.error('Error fetching footer:', error));
         });
         function setActiveNav() {
             let currentPath = window.location.pathname.split("/").pop();

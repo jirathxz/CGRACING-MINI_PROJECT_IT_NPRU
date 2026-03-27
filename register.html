@@ -62,12 +62,12 @@
         }
 
         .form-disabled {
-            opacity: 0.5; 
+            opacity: 0.5;
         }
 
         .form-control:disabled {
-            background-color: var(--bg-element); 
-            cursor: not-allowed; 
+            background-color: var(--bg-element);
+            cursor: not-allowed;
             color: #888;
         }
 
@@ -121,12 +121,14 @@
 
                     <div class="form-group">
                         <label for="password">รหัสผ่าน</label>
-                        <input type="password" id="password" class="form-control" placeholder="รหัสผ่านอย่างน้อย 6 ตัว" disabled>
+                        <input type="password" id="password" class="form-control" placeholder="รหัสผ่านอย่างน้อย 6 ตัว"
+                            disabled>
                     </div>
 
                     <div class="form-group">
                         <label for="confirm-password">ยืนยันรหัสผ่านอีกครั้ง</label>
-                        <input type="password" id="confirm-password" class="form-control" placeholder="กรอกรหัสผ่านเดิม" disabled>
+                        <input type="password" id="confirm-password" class="form-control" placeholder="กรอกรหัสผ่านเดิม"
+                            disabled>
                     </div>
 
                     <button type="submit" class="btn btn-disabled-style btn-register">
@@ -140,7 +142,7 @@
             </div>
         </article>
     </main>
-
+    <footer id="footer"></footer>
     <script>
         fetch('nav.html')
             .then(response => response.text())
@@ -152,7 +154,17 @@
                 setActiveNav();
             })
             .catch(error => console.error(error));
+        fetch('footer.html')
+            .then(response => response.text())
+            .then(data => {
+                const navElement = document.getElementById('footer');
 
+                navElement.innerHTML = '';
+                const fragment = document.createRange().createContextualFragment(data);
+                navElement.appendChild(fragment);
+
+            })
+            .catch(error => console.error('Error fetching footer:', error));
         function setActiveNav() {
             let currentPath = window.location.pathname.split("/").pop();
             if (currentPath === "" || currentPath === undefined) {
